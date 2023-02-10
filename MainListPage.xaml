@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.MainListPage"
              Title="MainListPage">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
+    </Shell.BackButtonBehavior>
     <VerticalStackLayout>
         <Label 
             Text="Welcome to .NET MAUI!"
