@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PFG2.MainPage"
+             xmlns:ViewModel="clr-namespace:PFG2.ViewModel"
+             x:DataType="ViewModel:MainPageViewModel">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+           
+
+            <Frame HeightRequest="45" Padding="0" HorizontalOptions="Fill" HasShadow="true">
+                <Entry Text="{Binding Username}" Margin="20,0,0,0" VerticalOptions="Center" Placeholder="Usuario"></Entry>
+            </Frame>
+
+            <Frame HeightRequest="45" Padding="0" HorizontalOptions="Fill" HasShadow="true">
+                <Entry Text="{Binding Password}"  Margin="20,0,0,0" VerticalOptions="Center" IsPassword="true" Placeholder="Contraseña"></Entry>
+            </Frame>
+
+            <Frame>
+                <Frame.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:MainPageViewModel}}, Path=CheckCredentials}"
+                        CommandParameter="{Binding .}"/>
+
+                </Frame.GestureRecognizers>
+                <Button
+                Text="Click me"
+                SemanticProperties.Hint="Counts the number of times you click"
+                Command="{Binding CheckCredentialsCommand}"
+                HorizontalOptions="Center" />
+            </Frame>
+            
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
