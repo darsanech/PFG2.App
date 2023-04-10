@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PFG2.Services;
+
 namespace PFG2.ViewModel
 {
     public partial class MainPageViewModel : ObservableObject
@@ -13,9 +15,12 @@ namespace PFG2.ViewModel
         [ICommand]
         async Task CheckCredentials()
         {
+            //var reservas = await DataBaseService.GetReservasList();
+            var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData.db");
+            await Shell.Current.GoToAsync("MainListPage");
+            
             if (username == "A")
             {                
-                await Shell.Current.GoToAsync(nameof(MainListPage));
             }
 
         }

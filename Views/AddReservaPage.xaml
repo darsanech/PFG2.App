@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PFG2.Views.AddReservaPage"
+             Title="Añadir Reserva!">
+    <RefreshView IsRefreshing="{Binding IsRefreshing}">
+        <VerticalStackLayout>
+            <Entry Text="{Binding Cliente}" Placeholder="Nom del Client" ClearButtonVisibility="WhileEditing"/>
+            <Entry Text="{Binding Parcela}" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
+            <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding NomCamping}" SelectedIndex="{Binding Camping}"/>
+            <Picker Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding NomProducte}" SelectedIndex="{Binding Producto}"/>
+            <DatePicker x:Name="DataIni" Date="{Binding DataIni}" Format="dd-MM-yyyy"/>
+            <DatePicker x:Name="DataFi"  Date="{Binding DataFi}" Format="dd-MM-yyyy"/>
+            <Entry Text="{Binding Preu}" Placeholder="Preu" ClearButtonVisibility="WhileEditing" Keyboard="Numeric"/>
+            <Picker Title="Estado" ItemsSource="{Binding EstadosList}" ItemDisplayBinding="{Binding TipoEstado}" SelectedIndex="{Binding Estado}"/>
+            <Entry Text="{Binding Extra}" Placeholder="Extra" ClearButtonVisibility="WhileEditing" />
+            <Button Command="{Binding UploadCommand}"/>
+        </VerticalStackLayout>
+    </RefreshView>
+</ContentPage>

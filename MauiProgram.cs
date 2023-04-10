@@ -1,4 +1,7 @@
-﻿using PFG2.ViewModel;
+﻿using PFG2.Views;
+using PFG2.Services;
+using PFG2.ViewModel;
+using CommunityToolkit.Maui;
 
 namespace PFG2;
 
@@ -9,11 +12,15 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+			.UseMauiCommunityToolkit()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
+
+
+        builder.Services.AddSingleton<DataBaseService>();
 
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<MainPageViewModel>();
@@ -21,6 +28,16 @@ public static class MauiProgram
         builder.Services.AddSingleton<MainListPage>();
 		builder.Services.AddSingleton<MainListViewModel>();
 
-		return builder.Build();
+        builder.Services.AddSingleton<CampingListPage>();
+        builder.Services.AddSingleton<CampingListModel>();
+
+        builder.Services.AddSingleton<AlquiladoPage>();
+        builder.Services.AddSingleton<AlquiladoViewModel>();
+
+		builder.Services.AddTransient<AddReservaPage>();
+		builder.Services.AddTransient<AddReservaViewModel>();
+
+
+        return builder.Build();
 	}
 }

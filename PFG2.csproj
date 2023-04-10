@@ -49,11 +49,35 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Maui" Version="2.0.0" />
+	  <PackageReference Include="CommunityToolkit.Maui.Core" Version="2.0.0" />
 	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
+	  <PackageReference Include="Dotmim.Sync.MySql" Version="0.9.8" />
+	  <PackageReference Include="Dotmim.Sync.Sqlite" Version="0.9.8" />
+	  <PackageReference Include="Dotmim.Sync.SqlServer" Version="0.9.8" />
+	  <PackageReference Include="Dotmim.Sync.SqlServer.ChangeTracking" Version="0.9.8" />
+	  <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+	  <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
+	  <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.4" />
+	  <PackageReference Include="SQLitePCLRaw.core" Version="2.1.4" />
+	  <PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.4" />
+	  <PackageReference Include="SQLitePCLRaw.provider.sqlite3" Version="2.1.4" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="MainListPage.xaml">
+	  <MauiXaml Update="Views\AddReservaPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\AlquiladoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\MainListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\CampingListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\PopupPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

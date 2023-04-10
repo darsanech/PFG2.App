@@ -1,6 +1,8 @@
+using PFG2.Models;
 using PFG2.ViewModel;
+using System.Collections.ObjectModel;
 
-namespace PFG2;
+namespace PFG2.Views;
 
 public partial class MainListPage : ContentPage
 {
@@ -8,5 +10,7 @@ public partial class MainListPage : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = vm;
+
 	}
+	
 }
