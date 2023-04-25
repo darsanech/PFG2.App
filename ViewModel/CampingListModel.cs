@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace PFG2.ViewModel
 {
-    [QueryProperty("Camping", "Camping")]
+    [QueryProperty("Campingid", "Campingid")]
 
     public partial class CampingListModel : ObservableObject
     {
 
-        public ObservableCollection<Reserva> ReservasList { get; } = new();
-        public ObservableCollection<Reserva> ReservasListFiltered { get; } = new();
+        public ObservableCollection<ReservasLista> ReservasList { get; } = new();
+        public ObservableCollection<ReservasLista> ReservasListFiltered { get; } = new();
 
         [ObservableProperty]
-        string camping;
+        int campingid;
         [ObservableProperty]
         bool isRefreshing;
         [ObservableProperty]
@@ -33,7 +33,7 @@ namespace PFG2.ViewModel
         [ICommand]
         public async Task OnLoad()
         {
-            if (ReservasList.Count == 0 || ReservasList.First().Camping != camping)
+            if (ReservasList.Count == 0 || ReservasList.First().campingid != campingid)
             {
                 newPage = true;
                 await Refresh();
@@ -53,7 +53,7 @@ namespace PFG2.ViewModel
             {
                 ReservasList.Clear();
             }
-            var reservas = await DataBaseService.GetReservasList(camping);
+            var reservas = await DataBaseService.GetReservasList(campingid);
             foreach(var reserva in reservas)
             {
                 ReservasList.Add(reserva);
@@ -79,7 +79,7 @@ namespace PFG2.ViewModel
                         break;
                 }
                 ReservasListFiltered.Clear();
-                var reservas = ReservasList.Where(x => x.Estado == listaActual);
+                var reservas = ReservasList.Where(x => x.estadoname == listaActual);
                 foreach (var reserva in reservas)
                 {
                     ReservasListFiltered.Add(reserva);
@@ -94,10 +94,11 @@ namespace PFG2.ViewModel
             //no le da al refresh de golpe
         }
         [ICommand]
-        public async void ChangeType(Reserva aReserva)
+        public async void ChangeType(ReservasLista aReserva)
         {
             //primero me gustaria tener una manera mejor de crear la db y editarla antes de ir moviendo cosas.
-            await DataBaseService.NextStep(aReserva);
+            Reserva res = await DataBaseService.GetReservabyId(aReserva.idreserva);
+            await DataBaseService.NextStep(res);
             await Refresh();
         }
 

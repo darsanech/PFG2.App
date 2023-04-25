@@ -6,10 +6,18 @@
              xmlns:ViewModel="clr-namespace:PFG2.ViewModel"
              Title="{Binding Camping}"
              >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Label">
+                <Setter Property="VerticalOptions" Value="End"></Setter>
+                <Setter Property="FontSize" Value="20"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Shell.BackButtonBehavior>
         <BackButtonBehavior IsEnabled="True" IsVisible="True"/>
     </Shell.BackButtonBehavior>
-    <Grid Background="Red">
+    <Grid Background="#212121">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.90*" />
             <RowDefinition Height="0.10*"/>
@@ -32,28 +40,31 @@
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <Grid>
-                                <StackLayout Padding="20,0,0,0" BackgroundColor="AliceBlue">
-                                    <HorizontalStackLayout>
-                                        <Label Text="{Binding Estado}" TextColor="Aqua"></Label>
+                                <StackLayout Padding="20,0,0,0" BackgroundColor="Gainsboro">
+                                    <HorizontalStackLayout >
+                                        <Label Text="{Binding estadoname}" FontSize="25" FontAttributes="Bold" TextColor="Green"></Label>
                                         <Label Text=" a la parcela "></Label>
-                                        <Label Text="{Binding Parcela}"></Label>
+                                        <Label Text="{Binding numeroparcela}" FontSize="25" FontAttributes="Bold" TextColor="Red" ></Label>
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout>
-                                        <Label Text="{Binding Producte}"></Label>
+                                        <Label Text="{Binding productes}" FontSize="25" FontAttributes="Bold" TextColor="Red" ></Label>
                                         <Label Text=" para "></Label>
-                                        <Label Text="{Binding Cliente}"></Label>
+                                        <Label Text="{Binding clientename}" FontAttributes="Bold" TextColor="Red"></Label>
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout>
                                         <Label Text="Del "></Label>
-                                        <Label Text="{Binding DataIni}"></Label>
+                                        <Label Text="{Binding datainici}"></Label>
                                         <Label Text=" al "></Label>
-                                        <Label Text="{Binding DataFi}"></Label>
+                                        <Label Text="{Binding datafinal}"></Label>
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout>
                                         <Label Text="Precio: "></Label>
-                                        <Label Text="{Binding Preu}"></Label>
+                                        <Label Text="{Binding preu}" FontSize="25" FontAttributes="Bold" TextColor="Red"></Label>
                                     </HorizontalStackLayout>
-                                    <Label Padding="-20,0,0,0" Text="----------"></Label>
+                                    <HorizontalStackLayout>
+                                        <Label Text="{Binding extra}"></Label>
+                                    </HorizontalStackLayout>
+                                    <Label Padding="-20,0,0,0" Text="----- ---- --- -- - -- --- ---- ------" FontAttributes="Bold" HorizontalOptions="Center"></Label>
                                 </StackLayout>
                             </Grid>
                         </SwipeView>
@@ -67,7 +78,7 @@
         <HorizontalStackLayout Margin="5,0,0,0" Spacing="10" Grid.Row="1">
             <Button x:Name="BEntregar"
                     BackgroundColor="Green"
-                    Text="Entregar" 
+                    Text="Entregar"
                     FontSize="20"
                     HorizontalOptions="CenterAndExpand" 
                     Clicked="Button_Clicked"/>

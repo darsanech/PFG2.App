@@ -15,6 +15,8 @@ namespace PFG2.ViewModel
         [ICommand]
         async Task CheckCredentials()
         {
+            await DataBaseService.GetDB();
+            await DataBaseService.InitDatabase();
             //var reservas = await DataBaseService.GetReservasList();
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData.db");
             await Shell.Current.GoToAsync("MainListPage");

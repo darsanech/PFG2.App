@@ -37,7 +37,7 @@ namespace PFG2.ViewModel
 
         private async void OnClickedButton(string camping)
         {
-            await Shell.Current.GoToAsync($"CampingListPage?Camping={camping}");
+            await Shell.Current.GoToAsync($"CampingListPage?Campingid={camping}");
         }
         private async void OnClickedAlquilado()
         {

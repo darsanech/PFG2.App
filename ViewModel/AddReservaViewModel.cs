@@ -44,15 +44,16 @@ namespace PFG2.ViewModel
         {
             if (newPage)
             {
-                var prods = await DataBaseService.GetProductosList();
-                foreach (var prod in prods)
-                {
-                    ProductosList.Add(prod);
-                }
+                
                 var camps = await DataBaseService.GetCampingsList();
                 foreach (var camp in camps)
                 {
                     CampingsList.Add(camp);
+                }
+                var prods = await DataBaseService.GetProductosList();
+                foreach (var prod in prods)
+                {
+                    ProductosList.Add(prod);
                 }
                 var estados = await DataBaseService.GetEstadosList();
                 foreach (var estado in estados)
@@ -102,6 +103,7 @@ namespace PFG2.ViewModel
             }
             else
             {
+                /*
                 Reserva newItem = new Reserva()
                 {
                     Camping = CampingsList[camping].NomCamping,
@@ -116,6 +118,7 @@ namespace PFG2.ViewModel
                 };
                 await DataBaseService.AddReserva(newItem);
                 await Shell.Current.GoToAsync("..");
+                */
             }
 
 

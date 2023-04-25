@@ -3,13 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.Views.AlquiladoPage"
              Title="AlquiladoPage">
-    <VerticalStackLayout>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Frame">
+                <Setter Property="CornerRadius" Value="5"></Setter>
+                <Setter Property="Padding" Value="0"></Setter>
+                <Setter Property="Background" Value="AntiqueWhite"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <VerticalStackLayout  VerticalOptions="Center" Margin="20">
+        
         <Label 
             Text="Aqui se realiza la buscacion!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Frame>
             <Entry Text="{Binding Parcela}" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
-            <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding NomCamping}" SelectedIndex="{Binding Camping}"/>
+        </Frame>
+        <Frame>
+            <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" 
+                SelectedIndex="{Binding Camping}"   FontSize="20"/>
+        </Frame>
         <Label Text="Data inicial"></Label>
         <HorizontalStackLayout>
             <CheckBox IsChecked="{Binding IniCheck, Mode=TwoWay}"/>
@@ -20,7 +35,7 @@
             <CheckBox IsChecked="{Binding FiCheck, Mode=TwoWay}"/>
             <DatePicker x:Name="DataFi"  Date="{Binding DataFi}" Format="dd-MM-yyyy"/>
         </HorizontalStackLayout>
-        <Button Text="A BUSCAR!" Command="{Binding SearchCommand}"/>
+        <Button Text="A BUSCAR!" Command="{Binding SearchCommand}" Margin="20"/>
 
     </VerticalStackLayout>
 </ContentPage>

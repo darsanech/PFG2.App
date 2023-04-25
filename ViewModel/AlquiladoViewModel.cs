@@ -66,7 +66,7 @@ namespace PFG2.ViewModel
                 {
                     parcela = null;
                 }
-                var res = await DataBaseService.GetReservasFilterKnownEstadoList(CampingsList[camping].NomCamping, parcela, "Alquilado", dataIniStr, dataFiStr);
+                var res = await DataBaseService.GetReservasFilterKnownEstadoList(CampingsList[camping].campingid, parcela, 2, dataIniStr, dataFiStr);
                 var a = 2;
             }
 
