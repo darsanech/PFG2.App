@@ -9,6 +9,7 @@
                 <Setter Property="CornerRadius" Value="5"></Setter>
                 <Setter Property="Padding" Value="0"></Setter>
                 <Setter Property="Background" Value="AntiqueWhite"></Setter>
+                <Setter Property="Margin" Value="15"></Setter>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -25,16 +26,24 @@
             <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" 
                 SelectedIndex="{Binding Camping}"   FontSize="20"/>
         </Frame>
-        <Label Text="Data inicial"></Label>
-        <HorizontalStackLayout>
-            <CheckBox IsChecked="{Binding IniCheck, Mode=TwoWay}"/>
-            <DatePicker x:Name="DataIni" Date="{Binding DataIni}" Format="dd-MM-yyyy"/>
-        </HorizontalStackLayout>
-        <Label Text="Data final"></Label>
-        <HorizontalStackLayout>
-            <CheckBox IsChecked="{Binding FiCheck, Mode=TwoWay}"/>
-            <DatePicker x:Name="DataFi"  Date="{Binding DataFi}" Format="dd-MM-yyyy"/>
-        </HorizontalStackLayout>
+        <Frame>
+            <VerticalStackLayout>
+                <Label Text="Data inicial" Margin="20"></Label>
+                <HorizontalStackLayout>
+                    <CheckBox IsChecked="{Binding IniCheck, Mode=TwoWay}"/>
+                    <DatePicker x:Name="DataIni" Date="{Binding DataIni}" Format="dd-MM-yyyy"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Frame>
+        <Frame>
+            <VerticalStackLayout>
+                <Label Text="Data final"></Label>
+                <HorizontalStackLayout>
+                    <CheckBox IsChecked="{Binding FiCheck, Mode=TwoWay}"/>
+                    <DatePicker x:Name="DataFi"  Date="{Binding DataFi}" Format="dd-MM-yyyy"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Frame>
         <Button Text="A BUSCAR!" Command="{Binding SearchCommand}" Margin="20"/>
 
     </VerticalStackLayout>

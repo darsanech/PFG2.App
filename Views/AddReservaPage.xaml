@@ -3,18 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.Views.AddReservaPage"
              Title="Añadir Reserva!">
-    <RefreshView IsRefreshing="{Binding IsRefreshing}">
-        <VerticalStackLayout>
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Margin="20">
+        <VerticalStackLayout HorizontalOptions="FillAndExpand">
             <Entry Text="{Binding Cliente}" Placeholder="Nom del Client" ClearButtonVisibility="WhileEditing"/>
             <Entry Text="{Binding Parcela}" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
-            <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" SelectedIndex="{Binding Camping}"/>
-            <Picker Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding productename}" SelectedIndex="{Binding Producto}"/>
+            <Picker  Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" SelectedIndex="{Binding Camping}"/>
+            <StackLayout x:Name="ProductosStack" VerticalOptions="Center">
+                
+            </StackLayout>
+            <Picker x:Name="Productto" Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding productoname}" SelectedIndex="{Binding Producto}"/>
+            <Button Text="Añadir producto" Clicked="AddProd_Button"/>
             <DatePicker x:Name="DataIni" Date="{Binding DataIni}" Format="dd-MM-yyyy"/>
             <DatePicker x:Name="DataFi"  Date="{Binding DataFi}" Format="dd-MM-yyyy"/>
             <Entry Text="{Binding Preu}" Placeholder="Preu" ClearButtonVisibility="WhileEditing" Keyboard="Numeric"/>
             <Picker Title="Estado" ItemsSource="{Binding EstadosList}" ItemDisplayBinding="{Binding estadoname}" SelectedIndex="{Binding Estado}"/>
             <Entry Text="{Binding Extra}" Placeholder="Extra" ClearButtonVisibility="WhileEditing" />
-            <Button Command="{Binding UploadCommand}"/>
+            <Button Text="Crear Reserva"  Command="{Binding UploadCommand}"/>
         </VerticalStackLayout>
     </RefreshView>
 </ContentPage>

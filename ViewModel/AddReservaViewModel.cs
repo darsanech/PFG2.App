@@ -13,6 +13,8 @@ namespace PFG2.ViewModel
 {
     public partial class AddReservaViewModel : ObservableObject
     {
+        //Un puñao de variables
+        #region
         public ObservableCollection<Estado> EstadosList { get; } = new();
         [ObservableProperty]
         int estado= -1;
@@ -39,6 +41,8 @@ namespace PFG2.ViewModel
         bool isRefreshing;
         [ObservableProperty]
         bool newPage=true;
+        #endregion
+
         [ICommand]
         public async Task OnLoad()
         {
@@ -123,5 +127,15 @@ namespace PFG2.ViewModel
 
 
         }
+        
+        public string ProducteName()
+        {
+            if(producto!=-1)
+                return ProductosList[producto].productoname;
+            else
+                return "None";
+
+        }
+
     }
 }

@@ -67,10 +67,8 @@ namespace PFG2.ViewModel
                     parcela = null;
                 }
                 var res = await DataBaseService.GetReservasFilterKnownEstadoList(CampingsList[camping].campingid, parcela, 2, dataIniStr, dataFiStr);
-                var a = 2;
+                //UNA PAGE PARA MOSTRARLOS, USAR LA CAMPINGLIST PERO QUITANDOLE LOS BOTONES?
             }
-
-
         }
     }
 }

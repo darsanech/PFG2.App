@@ -10,7 +10,7 @@
         <ResourceDictionary>
             <Style TargetType="Label">
                 <Setter Property="VerticalOptions" Value="End"></Setter>
-                <Setter Property="FontSize" Value="20"></Setter>
+                <Setter Property="FontSize" Value="15"></Setter>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -42,12 +42,12 @@
                             <Grid>
                                 <StackLayout Padding="20,0,0,0" BackgroundColor="Gainsboro">
                                     <HorizontalStackLayout >
-                                        <Label Text="{Binding estadoname}" FontSize="25" FontAttributes="Bold" TextColor="Green"></Label>
+                                        <Label Text="{Binding estadoname}" FontSize="15" FontAttributes="Bold" TextColor="Green"></Label>
                                         <Label Text=" a la parcela "></Label>
-                                        <Label Text="{Binding numeroparcela}" FontSize="25" FontAttributes="Bold" TextColor="Red" ></Label>
+                                        <Label Text="{Binding numeroparcela}" FontSize="20" FontAttributes="Bold" TextColor="Red" ></Label>
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout>
-                                        <Label Text="{Binding productes}" FontSize="25" FontAttributes="Bold" TextColor="Red" ></Label>
+                                        <Label Text="{Binding productes}" FontSize="15" FontAttributes="Bold" TextColor="Red" ></Label>
                                         <Label Text=" para "></Label>
                                         <Label Text="{Binding clientename}" FontAttributes="Bold" TextColor="Red"></Label>
                                     </HorizontalStackLayout>
@@ -57,9 +57,11 @@
                                         <Label Text=" al "></Label>
                                         <Label Text="{Binding datafinal}"></Label>
                                     </HorizontalStackLayout>
-                                    <HorizontalStackLayout>
+                                    <HorizontalStackLayout HorizontalOptions="End" Padding="0,0,10,0">
                                         <Label Text="Precio: "></Label>
-                                        <Label Text="{Binding preu}" FontSize="25" FontAttributes="Bold" TextColor="Red"></Label>
+                                        <Label Text="{Binding preu}" FontSize="20" FontAttributes="Bold" TextColor="Red"></Label>
+                                        <Label Text=" €"></Label>
+
                                     </HorizontalStackLayout>
                                     <HorizontalStackLayout>
                                         <Label Text="{Binding extra}"></Label>
