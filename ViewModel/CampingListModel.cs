@@ -12,12 +12,25 @@ using System.Threading.Tasks;
 namespace PFG2.ViewModel
 {
     [QueryProperty("Campingid", "Campingid")]
+    [QueryProperty("Estado", "Estado")]
+    [QueryProperty("Parcela", "Parcela")]
+    [QueryProperty("Datainici", "Datainici")]
+    [QueryProperty("Datafinal", "Datafinal")]
 
     public partial class CampingListModel : ObservableObject
     {
 
         public ObservableCollection<ReservasLista> ReservasList { get; } = new();
         public ObservableCollection<ReservasLista> ReservasListFiltered { get; } = new();
+
+        [ObservableProperty]
+        string estado=null;
+        [ObservableProperty]
+        string parcela = null;
+        [ObservableProperty]
+        string datainici = null;
+        [ObservableProperty]
+        string datafinal = null;
 
         [ObservableProperty]
         int campingid;
@@ -33,7 +46,17 @@ namespace PFG2.ViewModel
         [ICommand]
         public async Task OnLoad()
         {
-            if (ReservasList.Count == 0 || ReservasList.First().campingid != campingid)
+            if (estado!=null)
+            {
+                
+                var reservas = await DataBaseService.GetReservasFilterKnownEstadoList(campingid, parcela, 2, datainici, datafinal);
+                ReservasListFiltered.Clear();
+                foreach (var reserva in reservas)
+                {
+                    ReservasListFiltered.Add(reserva);
+                }
+            }
+            else if (ReservasList.Count == 0 || ReservasList.First().campingid != campingid)
             {
                 newPage = true;
                 await Refresh();

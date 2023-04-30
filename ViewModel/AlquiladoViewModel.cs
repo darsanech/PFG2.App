@@ -14,6 +14,10 @@ namespace PFG2.ViewModel
     public partial class AlquiladoViewModel : ObservableObject
     {
         public ObservableCollection<Camping> CampingsList { get; } = new();
+        
+        public static ObservableCollection<ReservasLista> ReservasList;
+
+
         [ObservableProperty]
         int camping = -1;
         [ObservableProperty]
@@ -29,6 +33,11 @@ namespace PFG2.ViewModel
         bool iniCheck=false;
         [ObservableProperty]
         bool fiCheck = false;
+
+        public static ObservableCollection<ReservasLista> GetReservasList()
+        {
+            return ReservasList;
+        }
 
         [ICommand]
         public async Task OnLoad()
@@ -66,8 +75,8 @@ namespace PFG2.ViewModel
                 {
                     parcela = null;
                 }
-                var res = await DataBaseService.GetReservasFilterKnownEstadoList(CampingsList[camping].campingid, parcela, 2, dataIniStr, dataFiStr);
-                //UNA PAGE PARA MOSTRARLOS, USAR LA CAMPINGLIST PERO QUITANDOLE LOS BOTONES?
+                var ReservasList = await DataBaseService.GetReservasFilterKnownEstadoList(CampingsList[camping].campingid, parcela, 2, dataIniStr, dataFiStr);
+                await Shell.Current.GoToAsync($"CampingListPage?Estado={2}&Parcela={parcela}&Datafinal={dataFiStr}&Datainici={dataIniStr}&Campingid={CampingsList[camping].campingid}");
             }
         }
     }

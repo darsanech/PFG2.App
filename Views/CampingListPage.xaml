@@ -11,6 +11,7 @@
             <Style TargetType="Label">
                 <Setter Property="VerticalOptions" Value="End"></Setter>
                 <Setter Property="FontSize" Value="15"></Setter>
+                <Setter Property="LineBreakMode" Value="WordWrap"></Setter>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -40,34 +41,35 @@
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <Grid>
-                                <StackLayout Padding="20,0,0,0" BackgroundColor="Gainsboro">
-                                    <HorizontalStackLayout >
-                                        <Label Text="{Binding estadoname}" FontSize="15" FontAttributes="Bold" TextColor="Green"></Label>
-                                        <Label Text=" a la parcela "></Label>
-                                        <Label Text="{Binding numeroparcela}" FontSize="20" FontAttributes="Bold" TextColor="Red" ></Label>
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout>
-                                        <Label Text="{Binding productes}" FontSize="15" FontAttributes="Bold" TextColor="Red" ></Label>
-                                        <Label Text=" para "></Label>
-                                        <Label Text="{Binding clientename}" FontAttributes="Bold" TextColor="Red"></Label>
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout>
-                                        <Label Text="Del "></Label>
-                                        <Label Text="{Binding datainici}"></Label>
-                                        <Label Text=" al "></Label>
-                                        <Label Text="{Binding datafinal}"></Label>
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout HorizontalOptions="End" Padding="0,0,10,0">
-                                        <Label Text="Precio: "></Label>
-                                        <Label Text="{Binding preu}" FontSize="20" FontAttributes="Bold" TextColor="Red"></Label>
-                                        <Label Text=" €"></Label>
+                                <Frame BackgroundColor="Gainsboro" CornerRadius="20" Padding="5,5,5,5" Margin="5,5,5,2.5">
+                                    <StackLayout Padding="20,0,0,0" BackgroundColor="Gainsboro" Orientation="Vertical">
+                                        <HorizontalStackLayout >
+                                            <Label Text="{Binding estadoname}" FontSize="15" FontAttributes="Bold" TextColor="Green"></Label>
+                                            <Label Text=" a la parcela "></Label>
+                                            <Label Text="{Binding numeroparcela}" FontSize="20" FontAttributes="Bold" TextColor="Red" ></Label>
+                                        </HorizontalStackLayout>
+                                        <Label Text="{Binding productes}" FontSize="15" FontAttributes="Bold" TextColor="Crimson" LineBreakMode="WordWrap" ></Label>
+                                        <StackLayout Orientation="Horizontal" HorizontalOptions="End" Padding="0,0,25,0">
+                                            <Label Text=" para "></Label>
+                                            <Label Text="{Binding clientename}" FontAttributes="Bold" TextColor="Red"></Label>
+                                        </StackLayout>
+                                        <HorizontalStackLayout>
+                                            <Label Text="Del "></Label>
+                                            <Label Text="{Binding datainici}"></Label>
+                                            <Label Text=" al "></Label>
+                                            <Label Text="{Binding datafinal}"></Label>
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout HorizontalOptions="End" Padding="0,0,10,0">
+                                            <Label Text="Precio: "></Label>
+                                            <Label Text="{Binding preu}" FontSize="20" FontAttributes="Bold" TextColor="Red"></Label>
+                                            <Label Text=" €"></Label>
 
-                                    </HorizontalStackLayout>
-                                    <HorizontalStackLayout>
-                                        <Label Text="{Binding extra}"></Label>
-                                    </HorizontalStackLayout>
-                                    <Label Padding="-20,0,0,0" Text="----- ---- --- -- - -- --- ---- ------" FontAttributes="Bold" HorizontalOptions="Center"></Label>
-                                </StackLayout>
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout>
+                                            <Label Text="{Binding extra}"></Label>
+                                        </HorizontalStackLayout>
+                                    </StackLayout>
+                                </Frame>
                             </Grid>
                         </SwipeView>
                     </DataTemplate>
@@ -77,7 +79,7 @@
         </RefreshView>
         
 
-        <HorizontalStackLayout Margin="5,0,0,0" Spacing="10" Grid.Row="1">
+        <HorizontalStackLayout x:Name="ToggleEstado" Margin="5,0,0,0" Spacing="10" Grid.Row="1">
             <Button x:Name="BEntregar"
                     BackgroundColor="Green"
                     Text="Entregar"

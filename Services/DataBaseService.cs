@@ -17,6 +17,8 @@ using Dotmim.Sync.SqlServer;
 using Dotmim.Sync;
 using Microsoft.Data.Sqlite;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
+using Microsoft.Maui.Graphics.Text;
 
 namespace PFG2.Services
 {
@@ -140,17 +142,17 @@ namespace PFG2.Services
                 "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid " +
                 "Where r.campingid=" + campingid.ToString()+" and r.estadoid="+estadoid.ToString());
 
-            if (parcela!=null)
+            if (parcela!="")
             {
                 query = query.Where(x => x.numeroparcela == parcela).ToList();
             }
             else
             {
-                if (dataini != null)
+                if (dataini != "")
                 {
                     query = query.Where(x => x.datainici == dataini).ToList();
                 }
-                if (datafi != null)
+                if (datafi != "")
                 {
                     query = query.Where(x => x.datafinal == datafi).ToList();
                 }
@@ -177,8 +179,19 @@ namespace PFG2.Services
         }
         public static async Task AddReserva(Reserva nReserva)
         {
-            await Init();
-            var insertest = await db.InsertAsync(nReserva);
+            try
+            {
+                Init();
+                var id = db.InsertAsync(nReserva);
+                var data = JsonConvert.SerializeObject(nReserva);
+                var content = new StringContent(data, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync(BaseUrl + "/api/Reserva", content);
+                
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+            }
         }
         public static async Task NextStep(Reserva nReserva)
         {

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic.FileIO;
 using PFG2.Models;
 using PFG2.Services;
 using System;
@@ -22,6 +23,7 @@ namespace PFG2.ViewModel
         [ObservableProperty]
         int camping = -1;
         public ObservableCollection<Producto> ProductosList { get; } = new();
+
         [ObservableProperty]
         int producto = -1;
         [ObservableProperty]
@@ -41,6 +43,8 @@ namespace PFG2.ViewModel
         bool isRefreshing;
         [ObservableProperty]
         bool newPage=true;
+
+        List<string> ListaProductos=new List<string>();
         #endregion
 
         [ICommand]
@@ -71,6 +75,8 @@ namespace PFG2.ViewModel
         [ICommand]
         public async Task Upload()
         {
+            
+            #region "Compara las entradas"
             List<string> a = new List<String>();
             if (camping == -1)
             {
@@ -80,7 +86,7 @@ namespace PFG2.ViewModel
             {
                 a.Add("Estado no seleccionat");
             }
-            if (producto == -1)
+            if (ListaProductos.Count()<=0)
             {
                 a.Add("Producto no seleccionat");
             }
@@ -100,37 +106,61 @@ namespace PFG2.ViewModel
             {
                 a.Add("Falta el preu");
             }
-            if(a.Count()>0)
+            if (extra == null)
+            {
+                extra = "";
+            }
+            if (a.Count()>0)
             {
                 await Application.Current.MainPage.DisplayAlert("A", string.Join(System.Environment.NewLine, a), "C");
 
             }
+            #endregion
             else
             {
-                /*
+
                 Reserva newItem = new Reserva()
                 {
-                    Camping = CampingsList[camping].NomCamping,
-                    Estado = EstadosList[estado].TipoEstado,
-                    Producte = ProductosList[producto].NomProducte,
-                    DataIni = dataIni.ToString("dd/MM/yyyy"),
-                    DataFi = dataFi.ToString("dd/MM/yyyy"),
-                    Cliente = cliente,
-                    Parcela = parcela,
+                    clientename = cliente,
+                    numeroparcela = parcela,
+                    campingid = camping + 1,
+                    productes = String.Join(", ", ListaProductos),
+                    productescodes = "",
+                    datainici = dataIni.ToString("dd/MM/yyyy"),
+                    datafinal = dataFi.ToString("dd/MM/yyyy"),
                     Preu = preu,
+                    estadoid = estado+1,
                     Extra = extra,
+                    userid = 1,
                 };
-                await DataBaseService.AddReserva(newItem);
+                try
+                {
+                    await DataBaseService.AddReserva(newItem);
+
+                }
+                catch(Exception ex) { 
+                    var exp = ex; }
                 await Shell.Current.GoToAsync("..");
-                */
+                
             }
 
 
         }
-        
+        public void ModProductList(string productoname, bool suma)
+        {
+            if(suma)
+                ListaProductos.Add(productoname);
+            else
+                ListaProductos.Remove(productoname);
+        }
+        public void RemoveProductList(string producte)
+        {
+            ListaProductos.Remove(producte);
+        }
         public string ProducteName()
         {
-            if(producto!=-1)
+            
+            if (producto!=-1)
                 return ProductosList[producto].productoname;
             else
                 return "None";

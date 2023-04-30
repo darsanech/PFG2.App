@@ -21,6 +21,7 @@ public partial class CampingListPage : ContentPage
         BRecoger.BackgroundColor = Color.Parse("Gray");
         */
         await (BindingContext as CampingListModel).OnLoad();
+        ToggleEstado.IsVisible = (BindingContext as CampingListModel).Estado == null;
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
