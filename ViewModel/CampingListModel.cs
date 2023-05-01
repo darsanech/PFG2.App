@@ -50,18 +50,15 @@ namespace PFG2.ViewModel
         public async Task OnLoad()
         {
             CampingList = true;
+            Camping = await DataBaseService.GetCampingName(campingid);
             if (estado!=null)
             {
                 CampingList = false;
-                var reservas = await DataBaseService.GetReservasFilterKnownEstadoList(campingid, parcela, 2, datainici, datafinal);
+                var reservas = await DataBaseService.GetReservasFilterKnownEstadoList(campingid, parcela, Int32.Parse(estado), datainici, datafinal);
                 ReservasListFiltered.Clear();
                 foreach (var reserva in reservas)
                 {
                     ReservasListFiltered.Add(reserva);
-                }
-                if (ReservasListFiltered.Count > 0)
-                {
-                    Camping = ReservasListFiltered.First().campingname;
                 }
             }
             else
@@ -84,10 +81,6 @@ namespace PFG2.ViewModel
             foreach(var reserva in reservas)
             {
                 ReservasList.Add(reserva);
-            }
-            if(ReservasList.Count> 0)
-            {
-                Camping = ReservasList.First().campingname;
             }
             await Filter(listaActual);
             IsRefreshing = false;

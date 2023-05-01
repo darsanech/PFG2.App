@@ -226,6 +226,20 @@ namespace PFG2.Services
             await db.UpdateAsync(nReserva);
         }
 
+        public static async Task<string> GetCampingName(int campingId)
+        {
+            await Init();
+            var res = await db.Table<Camping>().Where(x => x.campingid == campingId).FirstAsync();
+            return res.campingname;
+        }
+        public static async Task<string> GetEstadoName(int estadoId)
+        {
+            await Init();
+            var res = await db.Table<Estado>().Where(x => x.estadoid == estadoId).FirstAsync();
+            return res.estadoname;
+        }
+
+
 
     }
 }

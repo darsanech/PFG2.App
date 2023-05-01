@@ -24,24 +24,22 @@ namespace PFG2.ViewModel
         string textaco;
 
         public string Camping { get; set; }
-        public Command ClickedButton { get; }
-        public Command ClickedAlquilado { get; }
 
 
         public MainListViewModel()
         {
-            ClickedButton = new Command<string>((x) => OnClickedButton(x));
-            ClickedAlquilado = new Command(OnClickedAlquilado);
 
         }
 
-        private async void OnClickedButton(string camping)
+        [ICommand]
+        async Task ClickedButton(string camping)
         {
             await Shell.Current.GoToAsync($"CampingListPage?Campingid={camping}");
         }
-        private async void OnClickedAlquilado()
+        [ICommand]
+        async Task ClickedAlquilado(string estado)
         {
-            await Shell.Current.GoToAsync("AlquiladoPage");
+            await Shell.Current.GoToAsync($"AlquiladoPage?Estado={Int32.Parse(estado)}");
         }
 
         [ICommand]
