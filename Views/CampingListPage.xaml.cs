@@ -16,13 +16,7 @@ public partial class CampingListPage : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        /*
-        BEntregar.BackgroundColor = Color.Parse("Green");
-        BOtros.BackgroundColor = Color.Parse("Gray");
-        BRecoger.BackgroundColor = Color.Parse("Gray");
-        */
         await (BindingContext as CampingListModel).OnLoad();
-        ToggleEstado.IsVisible = (BindingContext as CampingListModel).Estado == null;
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
@@ -30,8 +24,13 @@ public partial class CampingListPage : ContentPage
         BEntregar.BackgroundColor = Color.Parse("Gray");
         BOtros.BackgroundColor = Color.Parse("Gray");
         BRecoger.BackgroundColor = Color.Parse("Gray");
+
+        BEntregar.IsEnabled = true;
+        BOtros.IsEnabled = true;
+        BRecoger.IsEnabled = true;
         var btn = (Button)sender;
         btn.BackgroundColor = Color.Parse("Green");
+        btn.IsEnabled = false;
         await(BindingContext as CampingListModel).Filter(btn.Text);
 
     }

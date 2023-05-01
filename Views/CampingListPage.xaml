@@ -50,6 +50,7 @@
                                             <Label Text="{Binding estadoname}" FontSize="15" FontAttributes="Bold" TextColor="Green"></Label>
                                             <Label Text=" a la parcela "></Label>
                                             <Label Text="{Binding numeroparcela}" FontSize="20" FontAttributes="Bold" TextColor="Red" ></Label>
+
                                         </HorizontalStackLayout>
                                         <Label Text="{Binding productes}" FontSize="15" FontAttributes="Bold" TextColor="Crimson" LineBreakMode="WordWrap" ></Label>
                                         <StackLayout Orientation="Horizontal" HorizontalOptions="End" Padding="0,0,25,0">
@@ -80,9 +81,9 @@
             </CollectionView>
 
         </RefreshView>
-        
 
-        <HorizontalStackLayout x:Name="ToggleEstado" Margin="5,0,0,0" Spacing="10" Grid.Row="1">
+
+        <HorizontalStackLayout x:Name="ToggleEstado" Margin="5,0,0,0" Spacing="10" Grid.Row="1" IsVisible="{Binding CampingList, Mode=TwoWay}">
             <Button x:Name="BEntregar"
                     BackgroundColor="Green"
                     Text="Entregar"

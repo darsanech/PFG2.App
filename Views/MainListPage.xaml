@@ -26,6 +26,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -47,14 +48,14 @@
                 CommandParameter="3"/>
         <Button Grid.Row="3"
                 Text="Más Nou"
-                BackgroundColor="BurlyWood"
+                BackgroundColor="Chocolate"
                 Command="{Binding ClickedButton}"
-                CommandParameter="4"/>
+                CommandParameter="5"/>
         <Button Grid.Column="1" 
                 Text="Rodas"
                 BackgroundColor="YellowGreen"
                 Command="{Binding ClickedButton}"
-                CommandParameter="5"/>
+                CommandParameter="6"/>
         <Button Grid.Column="1" 
                 Grid.Row="1"
                 Text="Rubina Resort"
@@ -64,10 +65,16 @@
         <Button Grid.Column="1" 
                 Grid.Row="2"
                 Text="Illa Mateua"
-                BackgroundColor="Green"
+                BackgroundColor="SandyBrown"
                 Command="{Binding ClickedButton}"
                 CommandParameter="8"/>
         <Button Grid.Row="3" 
+                Grid.Column="1" 
+                Text="Palmeras"
+                BackgroundColor="Green"
+                Command="{Binding ClickedButton}"
+                CommandParameter="4"/>
+        <Button Grid.Row="4" 
                 Grid.Column="1" 
                 Text="Otros"
                 BackgroundColor="Teal"

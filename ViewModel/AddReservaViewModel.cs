@@ -36,7 +36,10 @@ namespace PFG2.ViewModel
 
         public ObservableCollection<ProductoPH> ProductosPHList { get; } = new();
 
-
+        [ObservableProperty]
+        string textoBoton;
+        [ObservableProperty]
+        bool añadirProd=true;
 
         [ObservableProperty]
         string cliente;
@@ -80,6 +83,7 @@ namespace PFG2.ViewModel
                     EstadosList.Add(estado);
                 }
                 newPage = false;
+                TextoBoton = "Añadir reserva";
             }
             if (Idres > 0)
             {
@@ -93,6 +97,7 @@ namespace PFG2.ViewModel
                 Preu = reservaEditar.preu;
                 Extra = reservaEditar.extra;
                 StringtoPPH();
+                TextoBoton = "Modificar reserva";
             }
 
         }
@@ -110,6 +115,10 @@ namespace PFG2.ViewModel
             niu.productonombre= ProductosList[producto].productoname;
             ProductosPHList.Add(niu);
             Producto = -1;
+            if (ProductosPHList.Count() >= 5)
+            {
+                AñadirProd = false;
+            }
         }
 
         [ICommand]
@@ -229,17 +238,22 @@ namespace PFG2.ViewModel
         [ICommand]
         public void SumProduct(ProductoPH pph)
         {
-            ProductosPHList.Remove(pph);
+            var i=ProductosPHList.IndexOf(pph);
             pph.cantidad++;
-            ProductosPHList.Add(pph);
+            ProductosPHList[i]=pph;
         }
         [ICommand]
         public void ResProduct(ProductoPH pph)
         {
-            ProductosPHList.Remove(pph);
+            var i = ProductosPHList.IndexOf(pph);
             pph.cantidad--;
             if(pph.cantidad!=0)
-                ProductosPHList.Add(pph);
+                ProductosPHList[i]=pph;
+            else
+            {
+                AñadirProd = true;
+                ProductosPHList.RemoveAt(i);
+            }
         }
     }
 }

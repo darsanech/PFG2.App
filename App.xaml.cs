@@ -14,7 +14,6 @@ public partial class App : Application
         SetDataBaseService = _dataBaseService;
         
         MainPage = new AppShell();
-
-	}
+    }
     
 }

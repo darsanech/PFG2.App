@@ -35,32 +35,38 @@ namespace PFG2.ViewModel
         [ObservableProperty]
         int campingid;
         [ObservableProperty]
+        string camping;
+        [ObservableProperty]
         bool isRefreshing;
         [ObservableProperty]
         string listaActual= "Entregar";
         [ObservableProperty]
         string nextStep = "Alquilado";
+        
         [ObservableProperty]
-        bool newPage;
+        bool campingList;
 
         [ICommand]
         public async Task OnLoad()
         {
+            CampingList = true;
             if (estado!=null)
             {
-                
+                CampingList = false;
                 var reservas = await DataBaseService.GetReservasFilterKnownEstadoList(campingid, parcela, 2, datainici, datafinal);
                 ReservasListFiltered.Clear();
                 foreach (var reserva in reservas)
                 {
                     ReservasListFiltered.Add(reserva);
                 }
+                if (ReservasListFiltered.Count > 0)
+                {
+                    Camping = ReservasListFiltered.First().campingname;
+                }
             }
-            else if (ReservasList.Count == 0 || ReservasList.First().campingid != campingid)
+            else
             {
-                newPage = true;
                 await Refresh();
-
             }
         }
 
@@ -70,8 +76,6 @@ namespace PFG2.ViewModel
             //que el refresh lo elimine todo me parece xd
             //podria mirar si se ha updateado la general, (el numero ha cambiado)
             //pero puede que tambien cambiara el nuestro
-            newPage = true;
-
             if (ReservasList.Count != 0)
             {
                 ReservasList.Clear();
@@ -81,34 +85,34 @@ namespace PFG2.ViewModel
             {
                 ReservasList.Add(reserva);
             }
+            if(ReservasList.Count> 0)
+            {
+                Camping = ReservasList.First().campingname;
+            }
             await Filter(listaActual);
             IsRefreshing = false;
-            newPage = false;
 
         }
         [ICommand]
         public async Task Filter(string Filtro)
         {
-            if(newPage || listaActual != Filtro)
+            listaActual = Filtro;
+            switch (Filtro)
             {
-                listaActual = Filtro;
-                switch (Filtro)
-                {
-                    case "Recoger":
-                        nextStep = "Finalizado";
-                        break;
-                    default:
-                        nextStep = "Alquilado";
-                        break;
-                }
-                ReservasListFiltered.Clear();
-                var reservas = ReservasList.Where(x => x.estadoname == listaActual);
-                foreach (var reserva in reservas)
-                {
-                    ReservasListFiltered.Add(reserva);
-                }
-                isRefreshing = true;
+                case "Recoger":
+                    nextStep = "Finalizado";
+                    break;
+                default:
+                    nextStep = "Alquilado";
+                    break;
             }
+            ReservasListFiltered.Clear();
+            var reservas = ReservasList.Where(x => x.estadoname == listaActual);
+            foreach (var reserva in reservas)
+            {
+                ReservasListFiltered.Add(reserva);
+            }
+            isRefreshing = true;
         }
         [ICommand]
         async Task AddButton()

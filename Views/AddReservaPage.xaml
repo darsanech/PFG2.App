@@ -27,14 +27,15 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                    <Picker x:Name="Productto" Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding productoname}" SelectedIndex="{Binding Producto, Mode = TwoWay}"/>
-                    <Button x:Name="AddProductto" Text="Añadir producto" Command="{Binding AddProductoCommand}"/>
+                    <Picker x:Name="Productto" Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding productoname}" 
+                            SelectedIndex="{Binding Producto, Mode = TwoWay}" IsVisible="{Binding AñadirProd}"/>
+                    <Button x:Name="AddProductto" Text="Añadir producto" Command="{Binding AddProductoCommand, Mode=TwoWay}" IsVisible="{Binding AñadirProd}"/>
                     <DatePicker x:Name="DataIni" Date="{Binding DataIni, Mode = TwoWay}" Format="dd-MM-yyyy"/>
                     <DatePicker x:Name="DataFi"  Date="{Binding DataFi, Mode = TwoWay}" Format="dd-MM-yyyy"/>
                     <Entry x:Name="preu" Text="{Binding Preu, Mode = TwoWay}" Placeholder="Preu" ClearButtonVisibility="WhileEditing" Keyboard="Numeric"/>
                     <Picker Title="Estado" ItemsSource="{Binding EstadosList}" ItemDisplayBinding="{Binding estadoname}" SelectedIndex="{Binding Estado, Mode=TwoWay}"/>
                     <Entry Text="{Binding Extra, Mode=TwoWay}" Placeholder="Extra" ClearButtonVisibility="WhileEditing" />
-                <Button Text="Crear Reserva"  Command="{Binding UploadCommand}"/>
+                    <Button Text="{Binding TextoBoton}"  Command="{Binding UploadCommand}"/>
             </VerticalStackLayout>
         </ScrollView>
         </Grid>
