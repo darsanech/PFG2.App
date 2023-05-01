@@ -114,19 +114,29 @@ namespace PFG2.Services
         public static async Task<Reserva> GetReservabyId(int reservaId)
         {
             await Init();
-            var query = await db.QueryAsync<Reserva>("select * from Reserva Where reservaid=" + reservaId + ";");
+            var query = await db.QueryAsync<Reserva>("select * from Reserva Where idreserva=" + reservaId + ";");
 
             //var query = await db.Table<Reserva>().Where(x => x.campingid == campingid).ToListAsync();
 
             return query.FirstOrDefault();
         }
-        public static async Task<IEnumerable<ReservasLista>> GetReservasList(int campingid)
+        public static async Task<ReservasLista> GetReservaListabyId(int reservaId)
+        {
+            await Init();
+            var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
+                "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
+                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid Where r.idreserva=" + reservaId.ToString());
+
+            return query.FirstOrDefault();
+        }
+        public static async Task<IEnumerable<ReservasLista>> GetReservasListEntregaRecogerOtros(int campingid)
         {
             await Init();
             var query2 = await db.QueryAsync<Reserva>("select * from Reserva");
             var query= await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
-                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid Where r.campingid=" + campingid.ToString());
+                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid " +
+                "Where r.campingid=" + campingid.ToString()+ " and (r.estadoid=1 or r.estadoid=3 or r.estadoid=5)");
             
 
             //var query = await db.Table<Reserva>().Where(x => x.campingid == campingid).ToListAsync();
@@ -187,6 +197,22 @@ namespace PFG2.Services
                 var content = new StringContent(data, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(BaseUrl + "/api/Reserva", content);
                 
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+            }
+        }
+        public static async Task UpdateReserva(Reserva nReserva)
+        {
+            try
+            {
+                Init();
+                var id = db.UpdateAsync(nReserva);
+                var data = JsonConvert.SerializeObject(nReserva);
+                var content = new StringContent(data, Encoding.UTF8, "application/json");
+                var response = await client.PutAsync(BaseUrl + "/api/Reserva", content);
+
             }
             catch (Exception ex)
             {

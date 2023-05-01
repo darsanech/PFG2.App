@@ -68,9 +68,6 @@
 	  <MauiXaml Update="Views\AddReservaPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\AlquiladoListPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\AlquiladoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

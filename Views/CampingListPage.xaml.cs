@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace PFG2.Views;
 
+
 public partial class CampingListPage : ContentPage
 {
 	public CampingListPage(CampingListModel vm)

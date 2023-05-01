@@ -2,24 +2,38 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.Views.AddReservaPage"
+             xmlns:ViewModel="clr-namespace:PFG2.ViewModel"
              Title="Añadir Reserva!">
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Margin="20">
+    <RefreshView IsRefreshing="{Binding IsRefreshing}" Margin="20"  Command="{Binding RefreshCommand}">
         <Grid RowDefinitions="Auto,*,Auto">
             <ScrollView VerticalOptions="Start" Orientation="Vertical">
             <VerticalStackLayout>
-
-                <Entry Text="{Binding Cliente}" Placeholder="Nom del Client" ClearButtonVisibility="WhileEditing"/>
-                <Entry Text="{Binding Parcela}" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
-                <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" SelectedIndex="{Binding Camping}"/>
-                <StackLayout x:Name="ProductosStack">
-                </StackLayout>
-                <Picker x:Name="Productto" Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding productoname}" SelectedIndex="{Binding Producto}"/>
-                <Button x:Name="AddProductto" Text="Añadir producto" Clicked="AddProd_Button"/>
-                <DatePicker x:Name="DataIni" Date="{Binding DataIni}" Format="dd-MM-yyyy"/>
-                <DatePicker x:Name="DataFi"  Date="{Binding DataFi}" Format="dd-MM-yyyy"/>
-                <Entry Text="{Binding Preu}" Placeholder="Preu" ClearButtonVisibility="WhileEditing" Keyboard="Numeric"/>
-                <Picker Title="Estado" ItemsSource="{Binding EstadosList}" ItemDisplayBinding="{Binding estadoname}" SelectedIndex="{Binding Estado}"/>
-                <Entry Text="{Binding Extra}" Placeholder="Extra" ClearButtonVisibility="WhileEditing" />
+                    <Entry x:Name="cliente" Text="{Binding Cliente, Mode = TwoWay}" Placeholder="Nom del Client" ClearButtonVisibility="WhileEditing" />
+                    <Entry Text="{Binding Parcela,  Mode = TwoWay}" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
+                    <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" SelectedIndex="{Binding Camping, Mode = TwoWay}"/>
+                    <CollectionView ItemsSource="{Binding ProductosPHList}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Orientation="Horizontal" VerticalOptions="Start" HorizontalOptions="Fill" HeightRequest="60" Spacing="10">
+                                    <Label Text="{Binding productonombre}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"></Label>
+                                    <Button Text="-" HorizontalOptions="EndAndExpand" VerticalOptions="Center"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=ResProductCommand}"
+                                            CommandParameter="{Binding .}"></Button>
+                                    <Label Text="{Binding cantidad}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"></Label>
+                                    <Button Text="+" HorizontalOptions="EndAndExpand" VerticalOptions="Center"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=SumProductCommand}"
+                                            CommandParameter="{Binding .}"></Button>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Picker x:Name="Productto" Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding productoname}" SelectedIndex="{Binding Producto, Mode = TwoWay}"/>
+                    <Button x:Name="AddProductto" Text="Añadir producto" Command="{Binding AddProductoCommand}"/>
+                    <DatePicker x:Name="DataIni" Date="{Binding DataIni, Mode = TwoWay}" Format="dd-MM-yyyy"/>
+                    <DatePicker x:Name="DataFi"  Date="{Binding DataFi, Mode = TwoWay}" Format="dd-MM-yyyy"/>
+                    <Entry x:Name="preu" Text="{Binding Preu, Mode = TwoWay}" Placeholder="Preu" ClearButtonVisibility="WhileEditing" Keyboard="Numeric"/>
+                    <Picker Title="Estado" ItemsSource="{Binding EstadosList}" ItemDisplayBinding="{Binding estadoname}" SelectedIndex="{Binding Estado, Mode=TwoWay}"/>
+                    <Entry Text="{Binding Extra, Mode=TwoWay}" Placeholder="Extra" ClearButtonVisibility="WhileEditing" />
                 <Button Text="Crear Reserva"  Command="{Binding UploadCommand}"/>
             </VerticalStackLayout>
         </ScrollView>

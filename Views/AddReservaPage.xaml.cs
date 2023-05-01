@@ -22,6 +22,7 @@ public partial class AddReservaPage : ContentPage
         await (BindingContext as AddReservaViewModel).OnLoad();
     }
     int nProducto = 0;
+    /*
     private void ModProd(object sender, EventArgs e, int type)
     {
         Button button = (Button)sender;
@@ -44,6 +45,7 @@ public partial class AddReservaPage : ContentPage
             }
         }
     }
+    
     private void AddProd_Button(object sender, EventArgs e)
     {
         
@@ -99,5 +101,7 @@ public partial class AddReservaPage : ContentPage
                 AddProductto.IsVisible= false;
             }
         }
+    
     }
+    */
 }

@@ -76,7 +76,7 @@ namespace PFG2.ViewModel
             {
                 ReservasList.Clear();
             }
-            var reservas = await DataBaseService.GetReservasList(campingid);
+            var reservas = await DataBaseService.GetReservasListEntregaRecogerOtros(campingid);
             foreach(var reserva in reservas)
             {
                 ReservasList.Add(reserva);
@@ -121,8 +121,14 @@ namespace PFG2.ViewModel
         {
             //primero me gustaria tener una manera mejor de crear la db y editarla antes de ir moviendo cosas.
             Reserva res = await DataBaseService.GetReservabyId(aReserva.idreserva);
-            await DataBaseService.NextStep(res);
+            //await DataBaseService.NextStep(res);
             await Refresh();
+        }
+        [ICommand]
+        public async void EditProd(ReservasLista aReserva)
+        {
+            //primero me gustaria tener una manera mejor de crear la db y editarla antes de ir moviendo cosas.
+            await Shell.Current.GoToAsync($"AddReservaPage?Idres={aReserva.idreserva}");
         }
 
     }

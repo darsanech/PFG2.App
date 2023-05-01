@@ -30,7 +30,9 @@
                         <SwipeView>
                             <SwipeView.LeftItems>
                                 <SwipeItems>
-                                    <SwipeItem Text="Edit"></SwipeItem>
+                                    <SwipeItem Text="Edit" 
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=EditProdCommand}"
+                                               CommandParameter="{Binding .}"></SwipeItem>
                                 </SwipeItems>
                             </SwipeView.LeftItems>
                             <SwipeView.RightItems>
@@ -38,6 +40,7 @@
                                     <SwipeItem Text="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=NextStep}"
                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=ChangeTypeCommand}"
                                                CommandParameter="{Binding .}"></SwipeItem>
+                                    <SwipeItem Text="Pendiente Pago"></SwipeItem>
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <Grid>
