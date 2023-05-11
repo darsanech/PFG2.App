@@ -14,11 +14,11 @@
            
 
             <Frame HeightRequest="45" Padding="0" HorizontalOptions="Fill" HasShadow="true">
-                <Entry Text="{Binding Username}" Margin="20,0,0,0" VerticalOptions="Center" Placeholder="Usuario"></Entry>
+                <Entry Text="{Binding Username}" TextColor="Black" Margin="20,0,0,0" VerticalOptions="Center" Placeholder="Usuario"></Entry>
             </Frame>
 
             <Frame HeightRequest="45" Padding="0" HorizontalOptions="Fill" HasShadow="true">
-                <Entry Text="{Binding Password}"  Margin="20,0,0,0" VerticalOptions="Center" IsPassword="true" Placeholder="Contraseña"></Entry>
+                <Entry Text="{Binding Password}" TextColor="Black" Margin="20,0,0,0" VerticalOptions="Center" IsPassword="true" Placeholder="Contraseña"></Entry>
             </Frame>
 
             <Frame>

@@ -27,24 +27,28 @@
             <CollectionView ItemsSource="{Binding ReservasListFiltered}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <SwipeView>
+                        <SwipeView IsEnabled="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=CampingList}">
                             <SwipeView.LeftItems>
                                 <SwipeItems>
-                                    <SwipeItem Text="Edit" 
-                                               Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=EditProdCommand}"
-                                               CommandParameter="{Binding .}"></SwipeItem>
+                                    <SwipeItem Text="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=NextStepL}"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=APagarCommand}"
+                                               CommandParameter="{Binding .}" IsEnabled="False"></SwipeItem>                                    
                                 </SwipeItems>
                             </SwipeView.LeftItems>
                             <SwipeView.RightItems>
                                 <SwipeItems>
                                     <SwipeItem Text="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=NextStep}"
-                                               Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=ChangeTypeCommand}"
+                                               Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=SiguientePasoCommand}"
                                                CommandParameter="{Binding .}"></SwipeItem>
-                                    <SwipeItem Text="Pendiente Pago"></SwipeItem>
                                 </SwipeItems>
                             </SwipeView.RightItems>
                             <Grid>
                                 <Frame BackgroundColor="Gainsboro" CornerRadius="20" Padding="5,5,5,5" Margin="5,5,5,2.5">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=EditProdCommand}"
+                                               CommandParameter="{Binding .}" NumberOfTapsRequired="2">
+                                        </TapGestureRecognizer>
+                                    </Frame.GestureRecognizers>
                                     <StackLayout Padding="20,0,0,0" BackgroundColor="Gainsboro" Orientation="Vertical">
                                         <HorizontalStackLayout >
                                             <Label Text="{Binding estadoname}" FontSize="15" FontAttributes="Bold" TextColor="Green"></Label>

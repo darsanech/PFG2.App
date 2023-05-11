@@ -42,7 +42,9 @@ namespace PFG2.ViewModel
         string listaActual= "Entregar";
         [ObservableProperty]
         string nextStep = "Alquilado";
-        
+        [ObservableProperty]
+        string nextStepL = "Pagar";
+
         [ObservableProperty]
         bool campingList;
 
@@ -93,10 +95,16 @@ namespace PFG2.ViewModel
             switch (Filtro)
             {
                 case "Recoger":
-                    nextStep = "Finalizado";
+                    NextStep = "Finalizado";
+                    NextStepL = "Finalizado";
+                    break;
+                case "Otros":
+                    NextStep = "Alquilado";
+                    NextStepL = "Alquilado";
                     break;
                 default:
-                    nextStep = "Alquilado";
+                    NextStep = "Alquilado";
+                    NextStepL = "Pagar";
                     break;
             }
             ReservasListFiltered.Clear();
@@ -111,23 +119,30 @@ namespace PFG2.ViewModel
         async Task AddButton()
         {
             await Shell.Current.GoToAsync("AddReservaPage");
-            //no le da al refresh de golpe
         }
         [ICommand]
-        public async void ChangeType(ReservasLista aReserva)
+        public async void SiguientePaso(ReservasLista aReserva)
         {
-            //primero me gustaria tener una manera mejor de crear la db y editarla antes de ir moviendo cosas.
             Reserva res = await DataBaseService.GetReservabyId(aReserva.idreserva);
-            //await DataBaseService.NextStep(res);
+            await DataBaseService.ChangeStep(res, false);
+            await Refresh();
+        }
+        [ICommand]
+        public async void APagar(ReservasLista aReserva)
+        {
+            Reserva res = await DataBaseService.GetReservabyId(aReserva.idreserva);
+            await DataBaseService.ChangeStep(res, listaActual == "Entregar");
             await Refresh();
         }
         [ICommand]
         public async void EditProd(ReservasLista aReserva)
         {
-            //primero me gustaria tener una manera mejor de crear la db y editarla antes de ir moviendo cosas.
             await Shell.Current.GoToAsync($"AddReservaPage?Idres={aReserva.idreserva}");
         }
-
+        public string stringtest(string str)
+        {
+            return str + "!";
+        }
     }
 
 }

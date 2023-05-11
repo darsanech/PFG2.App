@@ -17,21 +17,13 @@ public partial class MainPage : ContentPage
     public MainPage(MainPageViewModel vm)
 	{
 		InitializeComponent();
-        /*
-		var assembly = IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly;
-		using (Stream stream = assembly.GetManifestResourceStream("PFG2.Models.User.cs"))
-		{
-			using (MemoryStream memoryStream = new MemoryStream())
-			{
-				stream.CopyTo(memoryStream);
-				File.WriteAllBytes(DataBaseService.databasePath, memoryStream.ToArray());
-
-            }
-		}
-		*/
         BindingContext = vm; 
 	}
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+        await (BindingContext as MainPageViewModel).OnLoad();
+    }
 
-	
 }
 

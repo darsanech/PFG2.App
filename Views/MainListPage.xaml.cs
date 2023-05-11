@@ -12,5 +12,9 @@ public partial class MainListPage : ContentPage
 		BindingContext = vm;
 
 	}
-	
+    protected async override void OnAppearing()
+    {
+        base.OnAppearing();
+    }
+
 }

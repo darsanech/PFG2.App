@@ -27,8 +27,6 @@ namespace PFG2.Services
         static SQLiteAsyncConnection db;
         public static string databasePath { get; set; }
 
-        private static string sqlConString = "Server=tcp:pfg.database.windows.net,1433;database=PFG;User ID=almata;Password=vH3Q7v29H!v;MultipleActiveResultSets=True;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;";
-        private static string sqlConString2 = "Data Source=TU-MADRE\\SQLEXPRESS;Initial Catalog=Test;User ID=almata;Password=vH3Q7v29H!v";
 
         static string BaseUrl = "https://pfgws.azurewebsites.net";
         static HttpClient client;
@@ -64,14 +62,6 @@ namespace PFG2.Services
             try
             {
                 db = new SQLiteAsyncConnection(databasePath);
-                /*
-                await db.CreateTableAsync<Camping>();
-                await db.CreateTableAsync<Reserva>();
-                await db.CreateTableAsync<Cliente>();
-                await db.CreateTableAsync<Estado>();
-                await db.CreateTableAsync<Producto>();
-                await db.CreateTableAsync<User>();
-                */
             }
             catch (Exception ex)
             {
@@ -219,11 +209,23 @@ namespace PFG2.Services
                 var a = ex;
             }
         }
-        public static async Task NextStep(Reserva nReserva)
+        public static async Task ChangeStep(Reserva nReserva, bool pagar)
         {
             await Init();
-            nReserva.estadoid += 1;
-            await db.UpdateAsync(nReserva);
+            if (pagar)
+            {
+                nReserva.estadoid = 5;
+
+            }
+            else if (nReserva.estadoid == 5)
+            {
+                nReserva.estadoid = 2;
+            }
+            else
+            {
+                nReserva.estadoid += 1;
+            }
+            await UpdateReserva(nReserva);
         }
 
         public static async Task<string> GetCampingName(int campingId)

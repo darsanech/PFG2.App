@@ -11,18 +11,30 @@ namespace PFG2.ViewModel
 
         [ObservableProperty]
         string password;
+        [ICommand]
+
+        public async Task OnLoad()
+        {
+
+            var session = await SecureStorage.GetAsync(nameof(App.Token));
+            if (session != null && session != "")
+            {
+                await Shell.Current.GoToAsync("MainListPage");
+            }
+        }
 
         [ICommand]
         async Task CheckCredentials()
         {
-            await DataBaseService.GetDB();
-            await DataBaseService.InitDatabase();
-            //var reservas = await DataBaseService.GetReservasList();
-            var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData.db");
-            await Shell.Current.GoToAsync("MainListPage");
-            
-            if (username == "A")
-            {                
+            var res= await LoginService.Login(username, password);
+            if(res!=null)
+            {
+                await DataBaseService.GetDB();
+                await DataBaseService.InitDatabase();
+                //var reservas = await DataBaseService.GetReservasList();
+                var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData.db");
+                await Shell.Current.GoToAsync("MainListPage");
+
             }
 
         }
