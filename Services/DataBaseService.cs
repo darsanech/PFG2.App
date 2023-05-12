@@ -74,7 +74,7 @@ namespace PFG2.Services
         }
         public static async Task GetDB()
         {
-
+            await AuthHeader();
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData.db");
             try
             {
@@ -98,12 +98,16 @@ namespace PFG2.Services
         public static async Task<IEnumerable<User>> GetUsersList()
         {
             await Init();
+            await AuthHeader();
+
             var query = await db.Table<User>().ToListAsync();
             return query;
         }
         public static async Task<Reserva> GetReservabyId(int reservaId)
         {
             await Init();
+            await AuthHeader();
+
             var query = await db.QueryAsync<Reserva>("select * from Reserva Where idreserva=" + reservaId + ";");
 
             //var query = await db.Table<Reserva>().Where(x => x.campingid == campingid).ToListAsync();
@@ -113,6 +117,8 @@ namespace PFG2.Services
         public static async Task<ReservasLista> GetReservaListabyId(int reservaId)
         {
             await Init();
+            await AuthHeader();
+
             var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
                 "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid Where r.idreserva=" + reservaId.ToString());
@@ -122,6 +128,8 @@ namespace PFG2.Services
         public static async Task<IEnumerable<ReservasLista>> GetReservasListEntregaRecogerOtros(int campingid)
         {
             await Init();
+            await AuthHeader();
+
             var query2 = await db.QueryAsync<Reserva>("select * from Reserva");
             var query= await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
@@ -136,6 +144,8 @@ namespace PFG2.Services
         public static async Task<IEnumerable<ReservasLista>> GetReservasFilterKnownEstadoList(int campingid,string parcela, int estadoid, string dataini, string datafi)
         {
             await Init();
+            await AuthHeader();
+
             //var query = await db.Table<Reserva>().Where(x => x.Camping == camping && x.Estado==estado).ToListAsync();
             var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
@@ -162,18 +172,24 @@ namespace PFG2.Services
         public static async Task<IEnumerable<Camping>> GetCampingsList()
         {
             await Init();
+            await AuthHeader();
+
             var query = await db.Table<Camping>().ToListAsync();
             return query;
         }
         public static async Task<IEnumerable<Producto>> GetProductosList()
         {
             await Init();
+            await AuthHeader();
+
             var query = await db.Table<Producto>().ToListAsync();
             return query;
         }
         public static async Task<IEnumerable<Estado>> GetEstadosList()
         {
             await Init();
+            await AuthHeader();
+
             var query = await db.Table<Estado>().ToListAsync();
             return query;
         }
@@ -182,6 +198,8 @@ namespace PFG2.Services
             try
             {
                 Init();
+                await AuthHeader();
+
                 var id = db.InsertAsync(nReserva);
                 var data = JsonConvert.SerializeObject(nReserva);
                 var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -198,6 +216,8 @@ namespace PFG2.Services
             try
             {
                 Init();
+                await AuthHeader();
+
                 var id = db.UpdateAsync(nReserva);
                 var data = JsonConvert.SerializeObject(nReserva);
                 var content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -212,6 +232,8 @@ namespace PFG2.Services
         public static async Task ChangeStep(Reserva nReserva, bool pagar)
         {
             await Init();
+            await AuthHeader();
+
             if (pagar)
             {
                 nReserva.estadoid = 5;
@@ -231,17 +253,30 @@ namespace PFG2.Services
         public static async Task<string> GetCampingName(int campingId)
         {
             await Init();
+            await AuthHeader();
+
             var res = await db.Table<Camping>().Where(x => x.campingid == campingId).FirstAsync();
             return res.campingname;
         }
         public static async Task<string> GetEstadoName(int estadoId)
         {
             await Init();
+            await AuthHeader();
+
             var res = await db.Table<Estado>().Where(x => x.estadoid == estadoId).FirstAsync();
             return res.estadoname;
         }
 
-
+        public static async Task<bool> AuthHeader()
+        {
+            var token = await SecureStorage.GetAsync(nameof(App.Token));
+            if (token == null)
+            {
+                return false;
+            }
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            return true;
+        }
 
     }
 }
