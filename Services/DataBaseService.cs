@@ -19,6 +19,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using Microsoft.Maui.Graphics.Text;
+using Newtonsoft.Json.Linq;
 
 namespace PFG2.Services
 {
@@ -269,7 +270,7 @@ namespace PFG2.Services
 
         public static async Task<bool> AuthHeader()
         {
-            var token = await SecureStorage.GetAsync(nameof(App.Token));
+            var token = await SecureStorage.GetAsync("JwtToken");
             if (token == null)
             {
                 return false;

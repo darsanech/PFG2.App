@@ -17,7 +17,7 @@
     </ContentPage.Resources>
 
     <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsEnabled="True" IsVisible="True"/>
+        <BackButtonBehavior IsEnabled="True"  IsVisible="True"/>
     </Shell.BackButtonBehavior>
     <Grid Margin="20,20,20,20" RowSpacing="5" ColumnSpacing="5">
         <Grid.RowDefinitions>
@@ -79,6 +79,12 @@
                 Text="Otros"
                 BackgroundColor="Teal"
                 Command="{Binding ClickedButtonCommand}"
+                CommandParameter="9"/>
+        <Button Grid.Row="4" 
+                Grid.Column="0" 
+                Text="PATRAS"
+                BackgroundColor="RosyBrown"
+                Command="{Binding BackButtonCommand}"
                 CommandParameter="9"/>
         <Button Grid.Row="5"
                 Text="Alquilados"

@@ -30,7 +30,12 @@ namespace PFG2.ViewModel
         {
 
         }
-
+        [ICommand]
+        async Task BackButton()
+        {
+            await SecureStorage.SetAsync("JwtToken", "");
+            await Shell.Current.GoToAsync("..");
+        }
         [ICommand]
         async Task ClickedButton(string camping)
         {

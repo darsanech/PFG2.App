@@ -10,9 +10,6 @@ namespace PFG2;
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
-    public ObservableCollection<Camping> ReservasList { get; } = new();
-
 
     public MainPage(MainPageViewModel vm)
 	{

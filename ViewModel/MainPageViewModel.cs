@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PFG2.Services;
+using System.Diagnostics;
 
 namespace PFG2.ViewModel
 {
@@ -15,12 +16,19 @@ namespace PFG2.ViewModel
 
         public async Task OnLoad()
         {
-
-            var session = await SecureStorage.GetAsync(nameof(App.Token));
-            if (session != null && session != "")
+            try
             {
-                await Shell.Current.GoToAsync("MainListPage");
+                var session = await SecureStorage.GetAsync("JwtToken");
+                if (session != null && session != "")
+                {
+                    await Shell.Current.GoToAsync("MainListPage");
+                }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unable to get information from server {ex}");
+            }
+
         }
 
         [ICommand]
