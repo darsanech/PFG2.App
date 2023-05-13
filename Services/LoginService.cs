@@ -51,6 +51,7 @@ namespace PFG2.Services
                     else
                     {
                         await Application.Current.MainPage.DisplayAlert("Atencion!", "No existes lmao", "Salir");
+                        return null;
                     }
                     return "Ok";
                 }

@@ -32,7 +32,7 @@
                                 <SwipeItems>
                                     <SwipeItem Text="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=NextStepL}"
                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:CampingListModel}}, Path=APagarCommand}"
-                                               CommandParameter="{Binding .}" IsEnabled="False"></SwipeItem>                                    
+                                               CommandParameter="{Binding .}" ></SwipeItem>                                    
                                 </SwipeItems>
                             </SwipeView.LeftItems>
                             <SwipeView.RightItems>

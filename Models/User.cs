@@ -11,5 +11,9 @@ namespace PFG2.Models
         public string Username { get; set; }
         [Column("pass")]
         public string Password { get; set; }
+        [Column("needupdate")]
+        public bool NeedUpdate { get; set; }
+        [Column("rol")]
+        public int Rol { get; set; }
     }
 }
