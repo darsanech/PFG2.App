@@ -203,32 +203,34 @@ namespace PFG2.Services
         {
             try {
                 await Init();
-                await AuthHeader();
-                var ok = await client.GetAsync(BaseUrl + $"/api/Sync/Load");
-                await UploadPendiente();
-                var query = await dbp.Table<ReservaPendiente>().ToListAsync();
-                if (query.Count() == 0)
+                var conn = Connectivity.NetworkAccess;
+
+                if (conn == NetworkAccess.Internet)
                 {
-                    string needed = await GetUpdate(campid);
-                    if (needed == "true")
+                    await AuthHeader();
+                    //var ok = await client.GetAsync(BaseUrl + $"/api/Sync/Load");
+                    await UploadPendiente();
+                    var query = await dbp.Table<ReservaPendiente>().ToListAsync();
+                    if (query.Count() == 0)
                     {
-                        var queryB = await client.GetAsync(BaseUrl + $"/api/Reserva/GetCamping?campid=" + campid.ToString());
-                        var contents = queryB.Content.ReadAsStringAsync().Result;
-                        IEnumerable<Reserva> res = JsonConvert.DeserializeObject<IEnumerable<Reserva>>(contents);
-                        await db.InsertOrReplaceAllWithChildrenAsync(res);
+                        string needed = await GetUpdate(campid);
+                        if (needed == "true")
+                        {
+                            var queryB = await client.GetAsync(BaseUrl + $"/api/Reserva/GetCamping?campid=" + campid.ToString());
+                            var contents = queryB.Content.ReadAsStringAsync().Result;
+                            IEnumerable<Reserva> res = JsonConvert.DeserializeObject<IEnumerable<Reserva>>(contents);
+                            await db.InsertOrReplaceAllWithChildrenAsync(res);
+                        }
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
                 else
                 {
                     return false;
                 }
-
-                /*
-                var a = queryB.Content;
-                if (res.Count() > 20)
-                {
-                }
-                */
                 return true;
             }
             catch (Exception ex)
@@ -264,13 +266,12 @@ namespace PFG2.Services
                 if (conn == NetworkAccess.Internet)
                 {
                     await AuthHeader();
-                    //var data = JsonConvert.SerializeObject(nReserva);
-                    //var content = new StringContent(data, Encoding.UTF8, "application/json");
-                    //var response = await client.PostAsync(BaseUrl + "/api/Reserva", content);
-                    //var contents = response.Content.ReadAsStringAsync().Result;
-                    //Reserva res = JsonConvert.DeserializeObject<Reserva>(contents);
-
-                    await db.InsertAsync(nReserva); //falta devolver la id nueva
+                    var data = JsonConvert.SerializeObject(nReserva);
+                    var content = new StringContent(data, Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync(BaseUrl + "/api/Reserva", content);
+                    var nid = response.Content.ReadAsStringAsync().Result;
+                    nReserva.idreserva = Int32.Parse(nid);
+                    await db.InsertAsync(nReserva); 
                 }
                 else
                 {
@@ -326,23 +327,23 @@ namespace PFG2.Services
         {
             var query = await dbp.Table<ReservaPendiente>().ToListAsync();
             var conn = Connectivity.NetworkAccess;
-            Reserva up;
+            Reserva up, old;
             int lid;
             while (query.Count()> 0 && conn == NetworkAccess.Internet)
             {
                 up = (Reserva)query[0];
+                old= (Reserva)query[0];
                 if (query[0].type) //Put
                 {
                     await UpdateReserva(up);
                 }
                 else //Post
                 {
-                    lid = up.idreserva;
+                    var a=await db.DeleteAsync(old);
+                    up.idreserva = 0;
                     await AddReserva(up);
-                    up.idreserva = lid;
-                    await db.DeleteAsync(up);
                 }
-
+                var b = await dbp.DeleteAsync(query[0]);
                 query.RemoveAt(0);
                 conn = Connectivity.NetworkAccess;
             }
