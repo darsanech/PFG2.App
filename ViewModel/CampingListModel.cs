@@ -47,17 +47,23 @@ namespace PFG2.ViewModel
 
         [ObservableProperty]
         bool campingList;
+        [ObservableProperty]
+        bool loading;
+        [ObservableProperty]
+        bool loaded;
 
         [ICommand]
         public async Task OnLoad()
         {
             CampingList = true;
+            Loading = true;
+            Loaded = false;
             Camping = await DataBaseService.GetCampingName(campingid);
             //Check si hace falta update
-            var ok = await DataBaseService.CheckUpdate(campingid);
             if (estado!=null)
             {
                 CampingList = false;
+                var ok = await DataBaseService.CheckUpdate(campingid);
                 var reservas = await DataBaseService.GetReservasFilterKnownEstadoList(campingid, parcela, Int32.Parse(estado), datainici, datafinal);
                 ReservasListFiltered.Clear();
                 foreach (var reserva in reservas)
@@ -69,14 +75,16 @@ namespace PFG2.ViewModel
             {
                 await Refresh();
             }
-        }
+            Loaded = true;
+            Loading = false;
 
+        }
         [ICommand]
         public async Task Refresh()
         {
-            //que el refresh lo elimine todo me parece xd
-            //podria mirar si se ha updateado la general, (el numero ha cambiado)
-            //pero puede que tambien cambiara el nuestro
+            Loading = true;
+            Loaded = false;
+            var ok = await DataBaseService.CheckUpdate(campingid);
             if (ReservasList.Count != 0)
             {
                 ReservasList.Clear();
@@ -88,7 +96,8 @@ namespace PFG2.ViewModel
             }
             await Filter(listaActual);
             IsRefreshing = false;
-
+            Loaded = true;
+            Loading = false;
         }
         [ICommand]
         public async Task Filter(string Filtro)
