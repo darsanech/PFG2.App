@@ -53,6 +53,8 @@ namespace PFG2.ViewModel
         {
             CampingList = true;
             Camping = await DataBaseService.GetCampingName(campingid);
+            //Check si hace falta update
+            var ok = await DataBaseService.CheckUpdate(campingid);
             if (estado!=null)
             {
                 CampingList = false;

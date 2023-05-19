@@ -33,12 +33,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<CampingListModel>();
 
         builder.Services.AddTransient<AlquiladoPage>();
-        builder.Services.AddTransient<AlquiladoViewModel>();
+        builder.Services.AddSingleton<AlquiladoViewModel>();
 
 		builder.Services.AddTransient<AddReservaPage>();
 		builder.Services.AddTransient<AddReservaViewModel>();
 
-        
+
 
 
         return builder.Build();

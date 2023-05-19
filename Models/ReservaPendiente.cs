@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PFG2.Models
 {
-    public class Reserva
+    public class ReservaPendiente
     {
-        [PrimaryKey, AutoIncrement, Column("idreserva")]
+        [PrimaryKey, Column("idreserva")]
         public int idreserva { get; set; }
 
         [Column("clientename")]
@@ -35,11 +35,12 @@ namespace PFG2.Models
         public string Extra { get; set; }
         [Column("userid")]
         public int userid { get; set; }
+        [Column("type")]
+        public bool type { get; set; } = false; //false=Post true=Put
 
-
-        public static explicit operator ReservaPendiente(Reserva obj)
+        public static explicit operator Reserva(ReservaPendiente obj)
         {
-            return JsonConvert.DeserializeObject<ReservaPendiente>(JsonConvert.SerializeObject(obj));
+            return JsonConvert.DeserializeObject<Reserva>(JsonConvert.SerializeObject(obj));
         }
     }
 }

@@ -1,12 +1,17 @@
 ﻿using SQLite;
+using System.ComponentModel.DataAnnotations;
 
 namespace PFG2.Models
 {
     public class Parcela
     {
-        [PrimaryKey, Column("campingid")]
+        [Key]
+        [Column("campingid")]
         public int campingid { get; set; }
-        [PrimaryKey, Column("numeroparcela")]
+
+        [Key]
+
+        [Column("numeroparcela")]
         public string numeroparcela { get; set; }
     }
 }

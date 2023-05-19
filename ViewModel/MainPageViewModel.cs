@@ -40,9 +40,8 @@ namespace PFG2.ViewModel
                 await DataBaseService.GetDB();
                 await DataBaseService.InitDatabase();
                 //var reservas = await DataBaseService.GetReservasList();
-                var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData.db");
+                var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
                 await Shell.Current.GoToAsync("MainListPage");
-
             }
 
         }

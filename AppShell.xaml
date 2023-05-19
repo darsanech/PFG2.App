@@ -9,15 +9,12 @@
     <Shell.FlyoutFooter>
         <Label Text="Hola"></Label>
     </Shell.FlyoutFooter>
-    
-    
+
+
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
-    <ShellContent
-        Title="Reserva?"
-        ContentTemplate="{DataTemplate local:Views.AddReservaPage}"
-        />
+
 
 </Shell>

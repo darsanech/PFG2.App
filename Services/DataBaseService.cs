@@ -20,12 +20,17 @@ using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using Microsoft.Maui.Graphics.Text;
 using Newtonsoft.Json.Linq;
+using Azure;
+using PFG2.Views;
+using SQLiteNetExtensionsAsync.Extensions;
 
 namespace PFG2.Services
 {
     public class DataBaseService
     {
         static SQLiteAsyncConnection db;
+        static SQLiteAsyncConnection dbp;
+
         public static string databasePath { get; set; }
 
 
@@ -54,15 +59,31 @@ namespace PFG2.Services
 ;        }
         static async Task Init()
         {
-            if (db != null)
+            if (db != null && dbp!=null)
                 return;
 
             // Get an absolute path to the database file
             
-            var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData.db");
+            var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
+            var databasePendiente = Path.Combine(FileSystem.AppDataDirectory, "MyDataPendiente.db");
+            File.Delete(databasePendiente);
             try
             {
+                if (!File.Exists(databasePendiente))
+                {
+                    var fileInfo = new FileInfo(databasePendiente);
+                }
+                dbp = new SQLiteAsyncConnection(databasePendiente);
+                await dbp.CreateTableAsync<ReservaPendiente>();
                 db = new SQLiteAsyncConnection(databasePath);
+                await db.CreateTableAsync<Reserva>();
+                await db.CreateTableAsync<Camping>();
+                await db.CreateTableAsync<Estado>();
+                await db.CreateTableAsync<Producto>();
+                await db.CreateTableAsync<User>();
+                await db.CreateTableAsync<Parcela>();
+                await db.CreateTableAsync<Suscripcion>();
+                string text = File.ReadAllText(databasePendiente);
             }
             catch (Exception ex)
             {
@@ -76,19 +97,19 @@ namespace PFG2.Services
         public static async Task GetDB()
         {
             await AuthHeader();
-            var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData.db");
+            var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
             try
             {
                 var Response = await client.GetAsync(BaseUrl + $"/api/Sync");
                 using (var stream = await Response.Content.ReadAsStreamAsync())
                 {
-                    var fileInfo = new FileInfo(Path.Combine(FileSystem.AppDataDirectory, "MyData.db"));
+                    var fileInfo = new FileInfo(Path.Combine(FileSystem.AppDataDirectory, "MyData2.db"));
                     using (var fileStream = fileInfo.OpenWrite())
                     {
                         await stream.CopyToAsync(fileStream);
                     }
                 }
-
+                string text = File.ReadAllText(databasePath);
             }
             catch (Exception ex)
             {
@@ -178,6 +199,46 @@ namespace PFG2.Services
             var query = await db.Table<Camping>().ToListAsync();
             return query;
         }
+        public static async Task<bool> CheckUpdate(int campid)
+        {
+            try {
+                await Init();
+                await AuthHeader();
+                var ok = await client.GetAsync(BaseUrl + $"/api/Sync/Load");
+                await UploadPendiente();
+                var query = await dbp.Table<ReservaPendiente>().ToListAsync();
+                if (query.Count() == 0)
+                {
+                    string needed = await GetUpdate(campid);
+                    if (needed == "true")
+                    {
+                        var queryB = await client.GetAsync(BaseUrl + $"/api/Reserva/GetCamping?campid=" + campid.ToString());
+                        var contents = queryB.Content.ReadAsStringAsync().Result;
+                        IEnumerable<Reserva> res = JsonConvert.DeserializeObject<IEnumerable<Reserva>>(contents);
+                        await db.InsertOrReplaceAllWithChildrenAsync(res);
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+
+                /*
+                var a = queryB.Content;
+                if (res.Count() > 20)
+                {
+                }
+                */
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+                return false;
+            }
+
+
+        }
         public static async Task<IEnumerable<Producto>> GetProductosList()
         {
             await Init();
@@ -199,13 +260,26 @@ namespace PFG2.Services
             try
             {
                 Init();
-                await AuthHeader();
+                var conn = Connectivity.NetworkAccess;
+                if (conn == NetworkAccess.Internet)
+                {
+                    await AuthHeader();
+                    //var data = JsonConvert.SerializeObject(nReserva);
+                    //var content = new StringContent(data, Encoding.UTF8, "application/json");
+                    //var response = await client.PostAsync(BaseUrl + "/api/Reserva", content);
+                    //var contents = response.Content.ReadAsStringAsync().Result;
+                    //Reserva res = JsonConvert.DeserializeObject<Reserva>(contents);
 
-                var id = db.InsertAsync(nReserva);
-                var data = JsonConvert.SerializeObject(nReserva);
-                var content = new StringContent(data, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync(BaseUrl + "/api/Reserva", content);
-                
+                    await db.InsertAsync(nReserva); //falta devolver la id nueva
+                }
+                else
+                {
+                    var id = await db.InsertAsync(nReserva);
+                    await dbp.InsertAsync((ReservaPendiente)nReserva);
+                    var query = await dbp.Table<ReservaPendiente>().ToListAsync();
+                }
+
+
             }
             catch (Exception ex)
             {
@@ -217,17 +291,60 @@ namespace PFG2.Services
             try
             {
                 Init();
-                await AuthHeader();
-
-                var id = db.UpdateAsync(nReserva);
-                var data = JsonConvert.SerializeObject(nReserva);
-                var content = new StringContent(data, Encoding.UTF8, "application/json");
-                var response = await client.PutAsync(BaseUrl + "/api/Reserva", content);
+                var conn = Connectivity.NetworkAccess;
+                if (conn == NetworkAccess.Internet){
+                    await AuthHeader();
+                    var data = JsonConvert.SerializeObject(nReserva);
+                    var content = new StringContent(data, Encoding.UTF8, "application/json");
+                    var response = await client.PutAsync(BaseUrl + "/api/Reserva", content);
+                    var id = db.UpdateAsync(nReserva);
+                }
+                else
+                {
+                    var id = await db.UpdateAsync(nReserva);
+                    ReservaPendiente np = (ReservaPendiente)nReserva;
+                    var res = await dbp.Table<ReservaPendiente>().Where(x => x.idreserva == nReserva.idreserva).ToListAsync();
+                    if (res.Count()==0)
+                    {
+                        np.type = true;
+                        await dbp.InsertAsync(np);
+                    }
+                    else
+                    {
+                        await dbp.UpdateAsync(np);
+                    }
+                    var query = await dbp.Table<ReservaPendiente>().ToListAsync();
+                }
 
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 var a = ex;
+            }
+        }
+        public static async Task UploadPendiente()
+        {
+            var query = await dbp.Table<ReservaPendiente>().ToListAsync();
+            var conn = Connectivity.NetworkAccess;
+            Reserva up;
+            int lid;
+            while (query.Count()> 0 && conn == NetworkAccess.Internet)
+            {
+                up = (Reserva)query[0];
+                if (query[0].type) //Put
+                {
+                    await UpdateReserva(up);
+                }
+                else //Post
+                {
+                    lid = up.idreserva;
+                    await AddReserva(up);
+                    up.idreserva = lid;
+                    await db.DeleteAsync(up);
+                }
+
+                query.RemoveAt(0);
+                conn = Connectivity.NetworkAccess;
             }
         }
         public static async Task ChangeStep(Reserva nReserva, bool pagar)
@@ -266,6 +383,23 @@ namespace PFG2.Services
 
             var res = await db.Table<Estado>().Where(x => x.estadoid == estadoId).FirstAsync();
             return res.estadoname;
+        }
+
+        public static async Task<string> GetUpdate(int campingid)
+        {
+            try
+            {
+                await AuthHeader();
+
+                var Response = await client.GetAsync(BaseUrl + $"/api/Suscripcion?campid=" + campingid.ToString());
+                return Response.Content.ReadAsStringAsync().Result;
+
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+                return ex.ToString();
+            }
         }
 
         public static async Task<bool> AuthHeader()
