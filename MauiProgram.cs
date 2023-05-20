@@ -38,6 +38,9 @@ public static class MauiProgram
 		builder.Services.AddTransient<AddReservaPage>();
 		builder.Services.AddTransient<AddReservaViewModel>();
 
+        builder.Services.AddTransient<MapPage>();
+        builder.Services.AddTransient<MapViewModel>();
+
 
 
 
