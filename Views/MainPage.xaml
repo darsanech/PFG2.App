@@ -3,15 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.MainPage"
              xmlns:ViewModel="clr-namespace:PFG2.ViewModel"
-             x:DataType="ViewModel:MainPageViewModel"
-             Shell.FlyoutBehavior="Flyout">
+             x:DataType="ViewModel:MainPageViewModel">
     <ScrollView>
         <VerticalStackLayout
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
-
-           
 
             <Frame HeightRequest="45" Padding="0" HorizontalOptions="Fill" HasShadow="true">
                 <Entry Text="{Binding Username}" TextColor="Black" Margin="20,0,0,0" VerticalOptions="Center" Placeholder="Usuario"></Entry>
@@ -31,9 +28,9 @@
                 <Button
                 Text="Click me"
                 Command="{Binding CheckCredentialsCommand}"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center" IsEnabled="{Binding Loaded, Mode=TwoWay}"/>
             </Frame>
-            
+            <ActivityIndicator IsRunning="True" IsVisible="{Binding Loading, Mode=TwoWay}"/>
 
         </VerticalStackLayout>
     </ScrollView>

@@ -19,6 +19,8 @@ public static class MauiProgram
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
+        builder.Services.AddSingleton<IGeolocation>(Geolocation.Default);
+
 
         builder.Services.AddSingleton<DataBaseService>();
         builder.Services.AddSingleton<LoginService>();

@@ -20,14 +20,33 @@ namespace PFG2.ViewModel
     {
         [ObservableProperty]
         string salsa;
-        static SQLiteAsyncConnection db;
         [ObservableProperty]
         int campingid;
         public ObservableCollection<Parcela> ParcelaList { get; } = new();
 
+        IGeolocation geolocation;
+
+        public MapViewModel(IGeolocation geolocation)
+        {
+            this.geolocation = geolocation;
+        }
         [ICommand]
         public async void OnLoad()
         {
+            var marker = "";
+            try
+            {
+                var location = await geolocation.GetLocationAsync(new GeolocationRequest
+                {
+                    DesiredAccuracy = GeolocationAccuracy.Medium,
+                    Timeout = TimeSpan.FromSeconds(30)
+                });
+                marker = "var marker = L.marker([" + location.Latitude.ToString().Replace(',', '.') + ", " + location.Longitude.ToString().Replace(',', '.') + "]).addTo(map);" + Environment.NewLine;
+
+            }
+            catch (Exception ex) { 
+                
+            }
             string addon = "";
             var parc = await DataBaseService.ShowMap(campingid);
             int i = 0;
@@ -39,6 +58,7 @@ namespace PFG2.ViewModel
                 addon += "'}).addTo(map).bindPopup('"+par.numeroparcela+"');" + Environment.NewLine;
                 i++;
             }
+            addon += marker;
             Salsa = @"<!DOCTYPE html>
 <html lang=""en"">
 <head>
@@ -64,10 +84,6 @@ namespace PFG2.ViewModel
             maxZoom: 19,
             attribution: '&copy; <a href=""http://www.openstreetmap.org/copyright"">OpenStreetMap</a>'
         }).addTo(map);
-        let a=[3.117239,3.004259,2.907759];
-        for(let i=0;i<3;i++){
-        var marker=L.marker([42.189371, a[i]]).addTo(map);
-        }
 ";
             Salsa += addon;
             Salsa += @"

@@ -12,13 +12,22 @@ namespace PFG2.ViewModel
 
         [ObservableProperty]
         string password;
-        [ICommand]
 
+        [ObservableProperty]
+        bool loading;
+        [ObservableProperty]
+        bool loaded;
+
+        [ICommand]
         public async Task OnLoad()
         {
             try
             {
+                Loading = true;
+                Loaded = false;
                 var session = await SecureStorage.GetAsync("JwtToken");
+                Loading = false;
+                Loaded = true;
                 if (session != null && session != "")
                 {
                     await Shell.Current.GoToAsync("MainListPage");
@@ -34,6 +43,8 @@ namespace PFG2.ViewModel
         [ICommand]
         async Task CheckCredentials()
         {
+            Loading = true;
+            Loaded = false;
             var res= await LoginService.Login(username, password);
             if(res!=null)
             {
@@ -41,6 +52,8 @@ namespace PFG2.ViewModel
                 await DataBaseService.InitDatabase();
                 //var reservas = await DataBaseService.GetReservasList();
                 var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
+                Loading = false;
+                Loaded = true;
                 await Shell.Current.GoToAsync("MainListPage");
             }
 

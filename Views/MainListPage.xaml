@@ -4,7 +4,6 @@
              xmlns:local="clr-namespace:PFG2"
              x:Class="PFG2.Views.MainListPage"
              Title="Lista"
-             Shell.FlyoutBehavior="Flyout"
              >
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -17,7 +16,7 @@
     </ContentPage.Resources>
 
     <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsEnabled="True"  IsVisible="True"/>
+        <BackButtonBehavior IsEnabled="False"  IsVisible="False"/>
     </Shell.BackButtonBehavior>
     <Grid Margin="20,20,20,20" RowSpacing="5" ColumnSpacing="5">
         <Grid.RowDefinitions>
@@ -93,11 +92,6 @@
                 CommandParameter="2"/>
         <Button Grid.Column="1" 
                 Grid.Row="5"
-                Text="Mapa"
-                Command="{Binding ClickedMapCommand}"
-                CommandParameter="4"/>
-        <Button Grid.Column="1" 
-                Grid.Row="4"
                 Text="FINALIZADOS"
                 Command="{Binding ClickedAlquiladoCommand}"
                 CommandParameter="4"/>
