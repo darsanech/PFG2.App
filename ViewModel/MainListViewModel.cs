@@ -19,10 +19,9 @@ namespace PFG2.ViewModel
     {
         public ObservableCollection<Reserva> ReservasList { get; }=new();
         [ObservableProperty]
-        bool isRefreshing;
+        bool isAdmin;
         [ObservableProperty]
-        string textaco;
-
+        bool newPage = true;
         public string Camping { get; set; }
 
 
@@ -31,14 +30,28 @@ namespace PFG2.ViewModel
 
         }
         [ICommand]
+        public async Task OnLoad()
+        {
+            if (newPage)
+            {
+                IsAdmin = await SecureStorage.GetAsync("Rol") == "0";
+                newPage = false;
+            }
+
+        }
+        [ICommand]
         async Task BackButton()
         {
+            newPage = true;
             await SecureStorage.SetAsync("JwtToken", "");
+            await SecureStorage.SetAsync("Rol", "");
+            await SecureStorage.SetAsync("UserId", "");
             await Shell.Current.GoToAsync("..");
         }
         [ICommand]
         async Task ClickedButton(string camping)
         {
+
             await Shell.Current.GoToAsync($"CampingListPage?Campingid={camping}");
         }
         [ICommand]

@@ -15,6 +15,7 @@ public partial class MainListPage : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
+        await (BindingContext as MainListViewModel).OnLoad();
     }
 
 }

@@ -12,6 +12,6 @@ namespace PFG2.Models
         public string token { get; set; }
         public int userId { get; set; }
         public int expirationInMinutes { get; set; }
-
+        public int Rol { get; set; }
     }
 }

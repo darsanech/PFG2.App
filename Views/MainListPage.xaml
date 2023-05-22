@@ -25,11 +25,11 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Button Text="Almata"
                 BackgroundColor="PeachPuff"
@@ -50,7 +50,7 @@
                 BackgroundColor="Chocolate"
                 Command="{Binding ClickedButtonCommand}"
                 CommandParameter="5"/>
-        <Button Grid.Column="1" 
+        <Button Grid.Column="2" 
                 Text="Rodas"
                 BackgroundColor="YellowGreen"
                 Command="{Binding ClickedButtonCommand}"
@@ -79,16 +79,28 @@
                 BackgroundColor="Teal"
                 Command="{Binding ClickedButtonCommand}"
                 CommandParameter="9"/>
-        <Button Grid.Row="4" 
-                Grid.Column="0" 
-                Text="PATRAS"
-                BackgroundColor="RosyBrown"
-                Command="{Binding BackButtonCommand}"
-                CommandParameter="9"/>
-        <Button Grid.Row="5"
+        <Button Grid.Row="4"
                 Text="Por Estado"
+                Grid.Column="0" 
                 BackgroundColor="Grey"
                 Command="{Binding ClickedAlquiladoCommand}"/>
+        <Button Grid.Row="5" 
+                Grid.Column="0" 
+                HorizontalOptions="Start"
+                VerticalOptions="End"
+                Text="Log Off"
+                BackgroundColor="Red"
+                Command="{Binding BackButtonCommand}"/>
+        <Button Grid.Row="5" 
+                Grid.Column="1" 
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Text="Admin"
+                BackgroundColor="Gold"
+                IsVisible="{Binding IsAdmin}"
+                IsEnabled="{Binding IsAdmin}"
+                Command="{Binding BackButtonCommand}"/>
+        
     </Grid>
 
 

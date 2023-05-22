@@ -44,9 +44,10 @@ namespace PFG2.Services
                         var bt = JsonConvert.DeserializeObject<BearerToken>(json);
 
                         await SecureStorage.SetAsync("JwtToken", bt.token);
+                        await SecureStorage.SetAsync("Userid", bt.userId.ToString());
+                        await SecureStorage.SetAsync("Rol", bt.Rol.ToString());
 
-                        App.Token = bt.token;
-                        App.Userid = bt.userId;
+
                     }
                     else
                     {
