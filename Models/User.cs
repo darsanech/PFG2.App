@@ -15,5 +15,7 @@ namespace PFG2.Models
         public bool NeedUpdate { get; set; }
         [Column("rol")]
         public int Rol { get; set; }
+        [Column("ubicacion")]
+        public string Ubicacion { get; set; }
     }
 }
