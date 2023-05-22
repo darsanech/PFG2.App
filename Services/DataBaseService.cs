@@ -66,7 +66,6 @@ namespace PFG2.Services
             
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
             var databasePendiente = Path.Combine(FileSystem.AppDataDirectory, "MyDataPendiente.db");
-            File.Delete(databasePendiente);
             try
             {
                 if (!File.Exists(databasePendiente))
@@ -81,7 +80,6 @@ namespace PFG2.Services
                 await db.CreateTableAsync<Estado>();
                 await db.CreateTableAsync<Producto>();
                 await db.CreateTableAsync<User>();
-                await db.CreateTableAsync<Parcela>();
                 await db.CreateTableAsync<Suscripcion>();
                 string text = File.ReadAllText(databasePendiente);
             }
@@ -140,7 +138,6 @@ namespace PFG2.Services
         {
             await Init();
             await AuthHeader();
-
             var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
                 "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid Where r.idreserva=" + reservaId.ToString());
@@ -298,7 +295,7 @@ namespace PFG2.Services
                     var data = JsonConvert.SerializeObject(nReserva);
                     var content = new StringContent(data, Encoding.UTF8, "application/json");
                     var response = await client.PutAsync(BaseUrl + "/api/Reserva", content);
-                    var id = db.UpdateAsync(nReserva);
+                    var id = await db.UpdateAsync(nReserva);
                 }
                 else
                 {
@@ -368,7 +365,17 @@ namespace PFG2.Services
             }
             await UpdateReserva(nReserva);
         }
-
+        //
+        public static async Task<IEnumerable<Parcela>> ShowMap(int campingId)
+        {
+            var conn = Connectivity.NetworkAccess;
+            if(conn == NetworkAccess.Internet) { }
+            var queryB = await client.GetAsync(BaseUrl + $"/api/Parcela?campingid=" + campingId.ToString()); 
+            var contents = queryB.Content.ReadAsStringAsync().Result;
+            IEnumerable<Parcela> res = JsonConvert.DeserializeObject<IEnumerable<Parcela>>(contents);
+            //await db.InsertOrReplaceAllWithChildrenAsync(res);
+            return res;
+        }
         public static async Task<string> GetCampingName(int campingId)
         {
             await Init();

@@ -101,30 +101,52 @@
 
 
         <HorizontalStackLayout x:Name="ToggleEstado" Margin="5,0,0,0" Spacing="10" Grid.Row="1" IsEnabled="{Binding Loaded, Mode=TwoWay}" IsVisible="{Binding CampingList, Mode=TwoWay}">
+            <Grid Margin="0,5,0,5" ColumnSpacing="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            <Button x:Name="BMap"
+                    Grid.Column="0"
+                    BackgroundColor="RosyBrown"
+                    Text="Mapa"
+                    FontSize="15"
+                    HorizontalOptions="CenterAndExpand" 
+                    Command="{Binding MapButtonCommand}"/>
             <Button x:Name="BEntregar"
+                    Grid.Column="1"
                     BackgroundColor="Green"
                     Text="Entregar"
-                    FontSize="20"
+                    FontSize="15"
                     HorizontalOptions="CenterAndExpand" 
                     Clicked="Button_Clicked"/>
             <Button x:Name="BRecoger"
+                    Grid.Column="2"
                     BackgroundColor="Gray"
                     Text="Recoger"
-                    FontSize="20"
+                    FontSize="15"
                     HorizontalOptions="Center"
                     Clicked="Button_Clicked"/>
             <Button x:Name="BOtros"
+                    Grid.Column="3"
                     BackgroundColor="Gray"
                     Text="Otros"
-                    FontSize="20"
+                    FontSize="15"
                     HorizontalOptions="CenterAndExpand" 
                     Clicked="Button_Clicked"/>
             <Button Text=" + " 
-                FontSize="30" 
+                    Grid.Column="4"
+                FontSize="25" 
                 Margin="0,0,0,0" 
                 BackgroundColor="DarkGreen" 
                 BorderColor="Black"
                 Command="{Binding AddButtonCommand}"/>
+            </Grid>
+
+
         </HorizontalStackLayout>
         
     </Grid>

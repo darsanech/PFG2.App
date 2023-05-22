@@ -93,6 +93,11 @@
                 CommandParameter="2"/>
         <Button Grid.Column="1" 
                 Grid.Row="5"
+                Text="Mapa"
+                Command="{Binding ClickedMapCommand}"
+                CommandParameter="4"/>
+        <Button Grid.Column="1" 
+                Grid.Row="4"
                 Text="FINALIZADOS"
                 Command="{Binding ClickedAlquiladoCommand}"
                 CommandParameter="4"/>

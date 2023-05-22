@@ -132,6 +132,11 @@ namespace PFG2.ViewModel
             await Shell.Current.GoToAsync("AddReservaPage");
         }
         [ICommand]
+        async Task MapButton()
+        {
+            await Shell.Current.GoToAsync($"MapPage?Campingid={campingid}");
+        }
+        [ICommand]
         public async void SiguientePaso(ReservasLista aReserva)
         {
             Reserva res = await DataBaseService.GetReservabyId(aReserva.idreserva);

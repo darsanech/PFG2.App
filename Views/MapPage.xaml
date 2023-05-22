@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.Views.MapPage"
              Title="MapPage">
+    <Grid>
     <WebView>
         <WebView.Source>
             <HtmlWebViewSource Html="{Binding Salsa}"/>
         </WebView.Source>
     </WebView>
+    </Grid>
 </ContentPage>

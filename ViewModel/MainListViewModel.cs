@@ -46,24 +46,12 @@ namespace PFG2.ViewModel
         {
             await Shell.Current.GoToAsync($"AlquiladoPage?Estado={Int32.Parse(estado)}");
         }
-
         [ICommand]
-        async Task Refresh()
+        async Task ClickedMap()
         {
-            //que el refresh lo elimine todo me parece xd
-            //podria mirar si se ha updateado la general, (el numero ha cambiado)
-            //pero puede que tambien cambiara el nuestrp
-            if (ReservasList.Count != 0){
-                ReservasList.Clear();
-            }
-            /*var reservas = await DataBaseService.GetReservasList();
-            foreach(var reserva in reservas)
-            {
-                //ReservasList.Add(reserva);
-            }
-            */
-            IsRefreshing = false;
+            await Shell.Current.GoToAsync($"MapPage");
         }
-        
+
+
     }
 }
