@@ -20,6 +20,7 @@ public static class MauiProgram
 			});
 
         builder.Services.AddSingleton<IGeolocation>(Geolocation.Default);
+        builder.Services.AddSingleton<GeoService>();
 
 
         builder.Services.AddSingleton<DataBaseService>();

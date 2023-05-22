@@ -24,28 +24,19 @@ namespace PFG2.ViewModel
         int campingid;
         public ObservableCollection<Parcela> ParcelaList { get; } = new();
 
-        IGeolocation geolocation;
 
-        public MapViewModel(IGeolocation geolocation)
+        public MapViewModel()
         {
-            this.geolocation = geolocation;
         }
         [ICommand]
         public async void OnLoad()
         {
             var marker = "";
-            try
+            var OwnUbi = await GeoService.GetUbicacionString();
+            if (OwnUbi != "")
             {
-                var location = await geolocation.GetLocationAsync(new GeolocationRequest
-                {
-                    DesiredAccuracy = GeolocationAccuracy.Medium,
-                    Timeout = TimeSpan.FromSeconds(30)
-                });
-                marker = "var marker = L.marker([" + location.Latitude.ToString().Replace(',', '.') + ", " + location.Longitude.ToString().Replace(',', '.') + "]).addTo(map);" + Environment.NewLine;
+                marker = "var marker = L.marker("+OwnUbi+").addTo(map);" + Environment.NewLine;
 
-            }
-            catch (Exception ex) { 
-                
             }
             string addon = "";
             var parc = await DataBaseService.ShowMap(campingid);
