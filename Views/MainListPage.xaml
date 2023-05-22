@@ -86,15 +86,9 @@
                 Command="{Binding BackButtonCommand}"
                 CommandParameter="9"/>
         <Button Grid.Row="5"
-                Text="Alquilados"
+                Text="Por Estado"
                 BackgroundColor="Grey"
-                Command="{Binding ClickedAlquiladoCommand}"
-                CommandParameter="2"/>
-        <Button Grid.Column="1" 
-                Grid.Row="5"
-                Text="FINALIZADOS"
-                Command="{Binding ClickedAlquiladoCommand}"
-                CommandParameter="4"/>
+                Command="{Binding ClickedAlquiladoCommand}"/>
     </Grid>
 
 

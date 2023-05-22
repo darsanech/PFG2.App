@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.Views.AlquiladoPage"
-             Title="{Binding Titulo}">
+             Title="Busqueda por estado">
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Frame">
@@ -25,6 +25,10 @@
         <Frame>
             <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" 
                 SelectedIndex="{Binding Camping}"   FontSize="20"/>
+        </Frame>
+        <Frame>
+            <Picker Title="Estado" ItemsSource="{Binding EstadoList}" ItemDisplayBinding="{Binding estadoname}" 
+                SelectedIndex="{Binding Estado}"   FontSize="20"/>
         </Frame>
         <Frame>
             <VerticalStackLayout>

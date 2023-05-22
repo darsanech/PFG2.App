@@ -42,9 +42,9 @@ namespace PFG2.ViewModel
             await Shell.Current.GoToAsync($"CampingListPage?Campingid={camping}");
         }
         [ICommand]
-        async Task ClickedAlquilado(string estado)
+        async Task ClickedAlquilado()
         {
-            await Shell.Current.GoToAsync($"AlquiladoPage?Estado={Int32.Parse(estado)}");
+            await Shell.Current.GoToAsync($"AlquiladoPage");
         }
         [ICommand]
         async Task ClickedMap()

@@ -70,7 +70,10 @@ namespace PFG2.ViewModel
     <div id=""map""></div>
     <script src=""https://unpkg.com/leaflet@1.9.4/dist/leaflet.js""></script>
     <script>
-        var map = L.map('map').setView([42.189371, 3.107249], 18);
+        var map = L.map('map').setView(";
+            //[42.189371, 3.107249]
+            Salsa += await DataBaseService.CampingUbi(campingid);
+        Salsa += @", 18);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href=""http://www.openstreetmap.org/copyright"">OpenStreetMap</a>'

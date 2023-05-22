@@ -119,7 +119,15 @@ namespace PFG2.ViewModel
                     break;
             }
             ReservasListFiltered.Clear();
-            var reservas = ReservasList.Where(x => x.estadoname == listaActual);
+            IEnumerable<ReservasLista> reservas;
+            if (listaActual == "Otros")
+            {
+                reservas = ReservasList.Where(x => x.estadoid>4);
+            }
+            else
+            {
+                reservas = ReservasList.Where(x => x.estadoname == listaActual);
+            }
             foreach (var reserva in reservas)
             {
                 ReservasListFiltered.Add(reserva);
@@ -139,16 +147,24 @@ namespace PFG2.ViewModel
         [ICommand]
         public async void SiguientePaso(ReservasLista aReserva)
         {
+            Loading = true;
+            Loaded = false;
             Reserva res = await DataBaseService.GetReservabyId(aReserva.idreserva);
             await DataBaseService.ChangeStep(res, false);
             await Refresh();
+            Loaded = true;
+            Loading = false;
         }
         [ICommand]
         public async void APagar(ReservasLista aReserva)
         {
+            Loading = true;
+            Loaded = false;
             Reserva res = await DataBaseService.GetReservabyId(aReserva.idreserva);
             await DataBaseService.ChangeStep(res, listaActual == "Entregar");
             await Refresh();
+            Loaded = true;
+            Loading = false;
         }
         [ICommand]
         public async void EditProd(ReservasLista aReserva)

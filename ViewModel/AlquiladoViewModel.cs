@@ -11,21 +11,21 @@ using System.Threading.Tasks;
 
 namespace PFG2.ViewModel
 {
-    [QueryProperty("Estado", "Estado")]
-
     public partial class AlquiladoViewModel : ObservableObject
     {
 
         public ObservableCollection<Camping> CampingsList { get; } = new();
-        
+        public ObservableCollection<Estado> EstadoList { get; } = new();
+
+
         public static ObservableCollection<ReservasLista> ReservasList;
 
-        [ObservableProperty]
-        int estado;
         [ObservableProperty]
         string titulo;
         [ObservableProperty]
         int camping = -1;
+        [ObservableProperty]
+        int estado = -1;
         [ObservableProperty]
         bool newPage = true;
 
@@ -48,13 +48,17 @@ namespace PFG2.ViewModel
         [ICommand]
         public async Task OnLoad()
         {
-            Titulo = await DataBaseService.GetEstadoName(estado);
             if (newPage)
             {
                 var camps = await DataBaseService.GetCampingsList();
                 foreach (var camp in camps)
                 {
                     CampingsList.Add(camp);
+                }
+                var ests = await DataBaseService.GetEstadosList();
+                foreach (var est in ests)
+                {
+                    EstadoList.Add(est);
                 }
                 newPage = false;
             }
@@ -63,9 +67,9 @@ namespace PFG2.ViewModel
         [ICommand]
         public async Task Search()
         {
-            if (camping == -1)
+            if (camping == -1 || estado==-1)
             {
-                await Application.Current.MainPage.DisplayAlert("A", "Es necesita minim el Camping", "C");
+                await Application.Current.MainPage.DisplayAlert("Alerta", "Es necesita minim el Camping y el Esatdo", "Ok!");
             }
             else
             {
@@ -83,7 +87,7 @@ namespace PFG2.ViewModel
                     parcela = null;
                 }
                 //var ReservasList = await DataBaseService.GetReservasFilterKnownEstadoList(CampingsList[camping].campingid, parcela, estado, dataIniStr, dataFiStr);
-                await Shell.Current.GoToAsync($"CampingListPage?Estado={estado}&Parcela={parcela}&Datafinal={dataFiStr}&Datainici={dataIniStr}&Campingid={CampingsList[camping].campingid}");
+                await Shell.Current.GoToAsync($"CampingListPage?Estado={EstadoList[estado].estadoid}&Parcela={parcela}&Datafinal={dataFiStr}&Datainici={dataIniStr}&Campingid={CampingsList[camping].campingid}");
             }
         }
     }

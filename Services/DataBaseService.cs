@@ -95,6 +95,7 @@ namespace PFG2.Services
         public static async Task GetDB()
         {
             await AuthHeader();
+
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
             try
             {
@@ -118,7 +119,6 @@ namespace PFG2.Services
         public static async Task<IEnumerable<User>> GetUsersList()
         {
             await Init();
-            await AuthHeader();
 
             var query = await db.Table<User>().ToListAsync();
             return query;
@@ -126,7 +126,6 @@ namespace PFG2.Services
         public static async Task<Reserva> GetReservabyId(int reservaId)
         {
             await Init();
-            await AuthHeader();
 
             var query = await db.QueryAsync<Reserva>("select * from Reserva Where idreserva=" + reservaId + ";");
 
@@ -137,7 +136,6 @@ namespace PFG2.Services
         public static async Task<ReservasLista> GetReservaListabyId(int reservaId)
         {
             await Init();
-            await AuthHeader();
             var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
                 "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid Where r.idreserva=" + reservaId.ToString());
@@ -147,13 +145,11 @@ namespace PFG2.Services
         public static async Task<IEnumerable<ReservasLista>> GetReservasListEntregaRecogerOtros(int campingid)
         {
             await Init();
-            await AuthHeader();
 
-            var query2 = await db.QueryAsync<Reserva>("select * from Reserva");
             var query= await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
                 "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid " +
-                "Where r.campingid=" + campingid.ToString()+ " and (r.estadoid=1 or r.estadoid=3 or r.estadoid=5)");
+                "Where r.campingid=" + campingid.ToString()+ " and (r.estadoid=1 or r.estadoid=3 or r.estadoid>4)");
             
 
             //var query = await db.Table<Reserva>().Where(x => x.campingid == campingid).ToListAsync();
@@ -163,7 +159,6 @@ namespace PFG2.Services
         public static async Task<IEnumerable<ReservasLista>> GetReservasFilterKnownEstadoList(int campingid,string parcela, int estadoid, string dataini, string datafi)
         {
             await Init();
-            await AuthHeader();
 
             //var query = await db.Table<Reserva>().Where(x => x.Camping == camping && x.Estado==estado).ToListAsync();
             var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
@@ -191,7 +186,6 @@ namespace PFG2.Services
         public static async Task<IEnumerable<Camping>> GetCampingsList()
         {
             await Init();
-            await AuthHeader();
 
             var query = await db.Table<Camping>().ToListAsync();
             return query;
@@ -241,7 +235,6 @@ namespace PFG2.Services
         public static async Task<IEnumerable<Producto>> GetProductosList()
         {
             await Init();
-            await AuthHeader();
 
             var query = await db.Table<Producto>().ToListAsync();
             return query;
@@ -249,7 +242,6 @@ namespace PFG2.Services
         public static async Task<IEnumerable<Estado>> GetEstadosList()
         {
             await Init();
-            await AuthHeader();
 
             var query = await db.Table<Estado>().ToListAsync();
             return query;
@@ -258,7 +250,7 @@ namespace PFG2.Services
         {
             try
             {
-                Init();
+                await Init();
                 var conn = Connectivity.NetworkAccess;
                 if (conn == NetworkAccess.Internet)
                 {
@@ -288,7 +280,7 @@ namespace PFG2.Services
         {
             try
             {
-                Init();
+                await Init();
                 var conn = Connectivity.NetworkAccess;
                 if (conn == NetworkAccess.Internet){
                     await AuthHeader();
@@ -325,7 +317,6 @@ namespace PFG2.Services
             var query = await dbp.Table<ReservaPendiente>().ToListAsync();
             var conn = Connectivity.NetworkAccess;
             Reserva up, old;
-            int lid;
             while (query.Count()> 0 && conn == NetworkAccess.Internet)
             {
                 up = (Reserva)query[0];
@@ -348,11 +339,10 @@ namespace PFG2.Services
         public static async Task ChangeStep(Reserva nReserva, bool pagar)
         {
             await Init();
-            await AuthHeader();
 
             if (pagar)
             {
-                nReserva.estadoid = 5;
+                nReserva.estadoid = 6;
 
             }
             else if (nReserva.estadoid == 5)
@@ -376,10 +366,17 @@ namespace PFG2.Services
             //await db.InsertOrReplaceAllWithChildrenAsync(res);
             return res;
         }
+        public static async Task<string> CampingUbi(int campingId)
+        {
+            await Init();
+            var res = await db.Table<Camping>().Where(x => x.campingid == campingId).FirstAsync();
+
+            return res.Ubicacion;
+
+        }
         public static async Task<string> GetCampingName(int campingId)
         {
             await Init();
-            await AuthHeader();
 
             var res = await db.Table<Camping>().Where(x => x.campingid == campingId).FirstAsync();
             return res.campingname;
@@ -387,7 +384,6 @@ namespace PFG2.Services
         public static async Task<string> GetEstadoName(int estadoId)
         {
             await Init();
-            await AuthHeader();
 
             var res = await db.Table<Estado>().Where(x => x.estadoid == estadoId).FirstAsync();
             return res.estadoname;
@@ -395,10 +391,11 @@ namespace PFG2.Services
 
         public static async Task<string> GetUpdate(int campingid)
         {
+            await Init();
+
             try
             {
                 await AuthHeader();
-
                 var Response = await client.GetAsync(BaseUrl + $"/api/Suscripcion?campid=" + campingid.ToString());
                 return Response.Content.ReadAsStringAsync().Result;
 
