@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PFG2.Views.AdministrarInventarioPage"
+             xmlns:ViewModel="clr-namespace:PFG2.ViewModel"
+             Title="Inventario">
+    <ScrollView>
+        <CollectionView ItemsSource="{Binding ProductosPHList}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                        <Frame BackgroundColor="Gray">
+                            <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="{Binding productoname}" FontSize="15"  VerticalOptions="Center" Margin="0,0,0,5"></Label>
+                                <HorizontalStackLayout >
+                                    <VerticalStackLayout>
+                                        <HorizontalStackLayout>
+                                            <Label Text="Total= " HorizontalOptions="Center" VerticalOptions="CenterAndExpand" ></Label>
+                                            <Label Text="{Binding total}" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" ></Label>
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout>
+                                            <Label Text="Disponible= " HorizontalOptions="Center" VerticalOptions="CenterAndExpand" ></Label>
+                                            <Label Text="{Binding disponible}" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" ></Label>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            <StackLayout Orientation="Vertical" Grid.Column="1">
+                                <HorizontalStackLayout >
+                                    <Label Text="Añadir= " HorizontalOptions="Center" VerticalOptions="CenterAndExpand" ></Label>
+                                    <Entry Text="{Binding mod}" Placeholder="Cambio"  VerticalOptions="Center"></Entry>
+                                </HorizontalStackLayout>
+                                <Button Text="Do" VerticalOptions="Center" 
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AdministrarInventarioViewModel}}, Path=ModificarCommand}"
+                                            CommandParameter="{Binding .}"></Button>
+                            </StackLayout>
+                            </Grid>
+                        </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ScrollView>
+    
+</ContentPage>

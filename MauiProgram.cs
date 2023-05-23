@@ -47,6 +47,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<AdminPage>();
         builder.Services.AddSingleton<AdminViewModel>();
 
+        builder.Services.AddSingleton<AdministrarInventarioPage>();
+        builder.Services.AddSingleton<AdministrarInventarioViewModel>();
+
         return builder.Build();
 	}
 }

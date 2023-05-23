@@ -15,7 +15,7 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Orientation="Horizontal" VerticalOptions="Start" HorizontalOptions="Fill" HeightRequest="60" Spacing="10">
-                                    <Label Text="{Binding productonombre}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"></Label>
+                                    <Label Text="{Binding productoname}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"></Label>
                                     <Button Text="-" HorizontalOptions="EndAndExpand" VerticalOptions="Center"
                                             Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=ResProductCommand}"
                                             CommandParameter="{Binding .}"></Button>

@@ -33,11 +33,7 @@ public partial class AdminViewModel : ObservableObject
     [ICommand]
     async Task AdministrarInventario()
     {
-
-    }
-    [ICommand]
-    async Task DisponibilidadInventario()
-    {
+        await Shell.Current.GoToAsync($"AdministrarInventarioPage");
 
     }
 }

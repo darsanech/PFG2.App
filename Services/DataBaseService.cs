@@ -232,17 +232,58 @@ namespace PFG2.Services
 
 
         }
+        public static async Task<bool> UpdateProductosList()
+        {
+            try
+            {
+                await Init();
+                var conn = Connectivity.NetworkAccess;
+
+                if (conn == NetworkAccess.Internet)
+                {
+                    await AuthHeader();
+                    await UploadPendiente();
+                    var query = await dbp.Table<ReservaPendiente>().ToListAsync();
+                    if (query.Count() == 0)
+                    {
+                        var queryB = await client.GetAsync(BaseUrl + $"/api/Producto");
+                        var contents = queryB.Content.ReadAsStringAsync().Result;
+                        IEnumerable<Producto> res = JsonConvert.DeserializeObject<IEnumerable<Producto>>(contents);
+                        await db.InsertOrReplaceAllWithChildrenAsync(res);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var a = ex;
+                return false;
+            }
+        }
         public static async Task<IEnumerable<Producto>> GetProductosList()
         {
             await Init();
-
             var query = await db.Table<Producto>().ToListAsync();
             return query;
+        }
+        public static async Task ModProductos(Producto p, int mod)
+        {
+            await Init();
+            await AuthHeader();
+            var response = await client.PutAsync(BaseUrl + "/api/Reserva?producteid="+p.producteid+ "&mod="+mod+"&total=true&sale=true", null);
+            await db.UpdateAsync(p);
         }
         public static async Task<IEnumerable<Estado>> GetEstadosList()
         {
             await Init();
-
             var query = await db.Table<Estado>().ToListAsync();
             return query;
         }

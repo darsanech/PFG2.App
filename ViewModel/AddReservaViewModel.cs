@@ -112,7 +112,7 @@ namespace PFG2.ViewModel
         {
             ProductoPH niu = new ProductoPH();
             niu.cantidad = 1;
-            niu.productonombre= ProductosList[producto].productoname;
+            niu.productoname = ProductosList[producto].productoname;
             ProductosPHList.Add(niu);
             Producto = -1;
             if (ProductosPHList.Count() >= 5)
@@ -205,7 +205,7 @@ namespace PFG2.ViewModel
             int count = ProductosPHList.Count();
             foreach (ProductoPH pph in ProductosPHList)
             {
-                res += pph.productonombre;
+                res += pph.productoname;
                 if (pph.cantidad > 1)
                 {
                     res += " x" + pph.cantidad;
@@ -223,7 +223,7 @@ namespace PFG2.ViewModel
             {
                 string[] Producte=s.Split(" x");
                 ProductoPH niu=new ProductoPH();
-                niu.productonombre = Producte[0];
+                niu.productoname = Producte[0];
                 if (Producte.Length==1)
                 {
                     niu.cantidad= 1;

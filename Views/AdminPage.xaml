@@ -44,10 +44,8 @@
                     <Label Text="Inventario"></Label>
                     <Button 
                         Text="Administrar Inventario"
-                        BackgroundColor="Green"/>
-                    <Button 
-                        Text="Disponibilidad Inventario"
-                        BackgroundColor="Green"/>
+                        BackgroundColor="Green"
+                        Command="{Binding AdministrarInventarioCommand}"/>
                 </VerticalStackLayout>
             </Frame>
             <Frame>
