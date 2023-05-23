@@ -60,9 +60,9 @@ namespace PFG2.ViewModel
             await Shell.Current.GoToAsync($"AlquiladoPage");
         }
         [ICommand]
-        async Task ClickedMap()
+        async Task ClickedAdmin()
         {
-            await Shell.Current.GoToAsync($"MapPage");
+            await Shell.Current.GoToAsync($"AdminPage");
         }
 
 

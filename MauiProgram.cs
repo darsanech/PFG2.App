@@ -44,8 +44,8 @@ public static class MauiProgram
         builder.Services.AddTransient<MapPage>();
         builder.Services.AddTransient<MapViewModel>();
 
-
-
+        builder.Services.AddSingleton<AdminPage>();
+        builder.Services.AddSingleton<AdminViewModel>();
 
         return builder.Build();
 	}

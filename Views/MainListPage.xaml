@@ -99,7 +99,7 @@
                 BackgroundColor="Gold"
                 IsVisible="{Binding IsAdmin}"
                 IsEnabled="{Binding IsAdmin}"
-                Command="{Binding BackButtonCommand}"/>
+                Command="{Binding ClickedAdminCommand}"/>
         
     </Grid>
 

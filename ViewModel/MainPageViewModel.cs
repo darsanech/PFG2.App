@@ -48,10 +48,14 @@ namespace PFG2.ViewModel
             var res= await LoginService.Login(username, password);
             if(res!=null)
             {
-                await DataBaseService.GetDB();
-                await DataBaseService.InitDatabase();
-                //var reservas = await DataBaseService.GetReservasList();
                 var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
+                if (!File.Exists(databasePath))
+                {
+                    await DataBaseService.GetDB();
+                    await DataBaseService.InitDatabase();
+                }
+                
+                //var reservas = await DataBaseService.GetReservasList();
                 Loading = false;
                 Loaded = true;
                 await Shell.Current.GoToAsync("MainListPage");

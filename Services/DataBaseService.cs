@@ -90,7 +90,7 @@ namespace PFG2.Services
         }
         public static async Task InitDatabase()
         {
-            Init();
+            await Init();
         }
         public static async Task GetDB()
         {
@@ -149,7 +149,7 @@ namespace PFG2.Services
             var query= await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
                 "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid " +
-                "Where r.campingid=" + campingid.ToString()+ " and (r.estadoid=1 or r.estadoid=3 or r.estadoid>4)");
+                "Where r.campingid=" + campingid.ToString()+ " and (r.estadoid=1 or r.estadoid=3 or r.estadoid=5 or r.estadoid=6)");
             
 
             //var query = await db.Table<Reserva>().Where(x => x.campingid == campingid).ToListAsync();
@@ -358,6 +358,7 @@ namespace PFG2.Services
         //
         public static async Task<IEnumerable<Parcela>> ShowMap(int campingId)
         {
+            await AuthHeader();
             var conn = Connectivity.NetworkAccess;
             if(conn == NetworkAccess.Internet) { }
             var queryB = await client.GetAsync(BaseUrl + $"/api/Parcela?campingid=" + campingId.ToString()); 
@@ -365,6 +366,23 @@ namespace PFG2.Services
             IEnumerable<Parcela> res = JsonConvert.DeserializeObject<IEnumerable<Parcela>>(contents);
             //await db.InsertOrReplaceAllWithChildrenAsync(res);
             return res;
+        }
+        public static async Task<IEnumerable<User>> ShowRep()
+        {
+            try
+            {
+                await AuthHeader();
+                var queryB = await client.GetAsync(BaseUrl + $"/api/User/GetUbi");
+                var contents = queryB.Content.ReadAsStringAsync().Result;
+                IEnumerable<User> res = JsonConvert.DeserializeObject<IEnumerable<User>>(contents);
+                //await db.InsertOrReplaceAllWithChildrenAsync(res);
+                return res;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+            
         }
         public static async Task<string> CampingUbi(int campingId)
         {
