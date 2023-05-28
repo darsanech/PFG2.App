@@ -31,45 +31,49 @@ namespace PFG2.ViewModel
         [ICommand]
         public async void OnLoad()
         {
-            string addon = "";
-            string marker = "";
-            string origin = "";
-            if (campingid != -1)
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
             {
-                origin = await DataBaseService.CampingUbi(campingid);
-                var OwnUbi = await GeoService.GetUbicacionString();
-                if (OwnUbi != "")
-                {
-                    marker = "var marker = L.marker(" + OwnUbi + ").addTo(map);" + Environment.NewLine;
-
-                }
-                var parc = await DataBaseService.ShowMap(campingid);
-                int i = 0;
-                foreach (var par in parc)
-                {
-                    addon += "var polygon" + par.parcelaid + "=L.polygon(";
-                    addon += par.geometryy;
-                    addon += ",{color:'" + estadotocolor(par.estadoid);
-                    addon += "'}).addTo(map).bindPopup('" + par.numeroparcela + "');" + Environment.NewLine;
-                    i++;
-                }
-                addon += marker;
+                await Application.Current.MainPage.DisplayAlert("Atencion!", "No tienes conexion a internet", "Salir");
+                await Shell.Current.GoToAsync($"..");
             }
-            else
-            {
-
-                var reps = await DataBaseService.ShowRep();
-                int i = 0;
-                origin = reps.First().Ubicacion;
-                foreach (var rep in reps)
+            else {
+                string addon = "";
+                string marker = "";
+                string origin = "";
+                if (campingid != -1)
                 {
-                    addon+="var marker"+i+" =L.marker(" + rep.Ubicacion + ").addTo(map);" + Environment.NewLine;
-                    i++;
-                }
-            }
-            
+                    origin = await DataBaseService.CampingUbi(campingid);
+                    var OwnUbi = await GeoService.GetUbicacionString();
+                    if (OwnUbi != "")
+                    {
+                        marker = "var marker = L.marker(" + OwnUbi + ").addTo(map);" + Environment.NewLine;
 
-            Salsa = @"<!DOCTYPE html>
+                    }
+                    var parc = await DataBaseService.ShowMap(campingid);
+                    int i = 0;
+                    foreach (var par in parc)
+                    {
+                        addon += "var polygon" + par.parcelaid + "=L.polygon(";
+                        addon += par.geometryy;
+                        addon += ",{color:'" + estadotocolor(par.estadoid);
+                        addon += "'}).addTo(map).bindPopup('" + par.numeroparcela + "');" + Environment.NewLine;
+                        i++;
+                    }
+                    addon += marker;
+                }
+                else
+                {
+                    var reps = await DataBaseService.ShowRep();
+                    int i = 0;
+                    origin = reps.First().Ubicacion;
+                    foreach (var rep in reps)
+                    {
+                        addon += "var marker" + i + " =L.marker(" + rep.Ubicacion + ").addTo(map);" + Environment.NewLine;
+                        i++;
+                    }
+                }
+
+                Salsa = @"<!DOCTYPE html>
 <html lang=""en"">
 <head>
     <meta charset=""UTF-8"">
@@ -90,19 +94,21 @@ namespace PFG2.ViewModel
     <script src=""https://unpkg.com/leaflet@1.9.4/dist/leaflet.js""></script>
     <script>
         var map = L.map('map').setView(";
-            Salsa += origin;
-            Salsa += @", 18);
+                Salsa += origin;
+                Salsa += @", 18);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href=""http://www.openstreetmap.org/copyright"">OpenStreetMap</a>'
         }).addTo(map);
 ";
-            Salsa += addon;
-            Salsa += @"
+                Salsa += addon;
+                Salsa += @"
     </script>
 
 </body>
 </html";
+            }
+            
 
         }
         public string estadotocolor(int estadoid)

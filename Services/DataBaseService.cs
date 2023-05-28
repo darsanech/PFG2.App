@@ -190,6 +190,16 @@ namespace PFG2.Services
             var query = await db.Table<Camping>().ToListAsync();
             return query;
         }
+        public static async Task<string> PutUbi()
+        {
+
+            await AuthHeader();
+            string ownubi = await GeoService.GetUbicacionString();
+            if(ownubi != "") {
+                var response = await client.PutAsync(BaseUrl + "/api/User/PutUbi?newUbi=" + ownubi, null);
+            }
+            return ownubi;
+        }
         public static async Task<bool> CheckUpdate(int campid)
         {
             try {
@@ -198,8 +208,8 @@ namespace PFG2.Services
 
                 if (conn == NetworkAccess.Internet)
                 {
+                    //await PutUbi();
                     await AuthHeader();
-                    //var ok = await client.GetAsync(BaseUrl + $"/api/Sync/Load");
                     await UploadPendiente();
                     var query = await dbp.Table<ReservaPendiente>().ToListAsync();
                     if (query.Count() == 0)

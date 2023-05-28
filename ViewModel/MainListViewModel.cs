@@ -43,9 +43,6 @@ namespace PFG2.ViewModel
         async Task BackButton()
         {
             newPage = true;
-            await SecureStorage.SetAsync("JwtToken", "");
-            await SecureStorage.SetAsync("Rol", "");
-            await SecureStorage.SetAsync("UserId", "");
             await Shell.Current.GoToAsync("..");
         }
         [ICommand]

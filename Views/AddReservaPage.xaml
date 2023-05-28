@@ -3,41 +3,114 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.Views.AddReservaPage"
              xmlns:ViewModel="clr-namespace:PFG2.ViewModel"
-             Title="Añadir Reserva!">
-    <RefreshView IsRefreshing="{Binding IsRefreshing}" Margin="20"  Command="{Binding RefreshCommand}">
-        <Grid RowDefinitions="Auto,*,Auto">
+             Title="Reserva">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="Grey"></Setter>
+                <Setter Property="Padding" Value="5"></Setter>
+                <Setter Property="Margin" Value="5,0,5,10"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+      <Grid RowDefinitions="Auto,*,Auto">
             <ScrollView VerticalOptions="Start" Orientation="Vertical">
             <VerticalStackLayout>
-                    <Entry x:Name="cliente" Text="{Binding Cliente, Mode = TwoWay}" Placeholder="Nom del Client" ClearButtonVisibility="WhileEditing" />
-                    <Entry Text="{Binding Parcela,  Mode = TwoWay}" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
-                    <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" SelectedIndex="{Binding Camping, Mode = TwoWay}"/>
-                    <CollectionView ItemsSource="{Binding ProductosPHList}">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout Orientation="Horizontal" VerticalOptions="Start" HorizontalOptions="Fill" HeightRequest="60" Spacing="10">
-                                    <Label Text="{Binding productoname}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"></Label>
-                                    <Button Text="-" HorizontalOptions="EndAndExpand" VerticalOptions="Center"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=ResProductCommand}"
-                                            CommandParameter="{Binding .}"></Button>
-                                    <Label Text="{Binding cantidad}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"></Label>
-                                    <Button Text="+" HorizontalOptions="EndAndExpand" VerticalOptions="Center"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=SumProductCommand}"
-                                            CommandParameter="{Binding .}"></Button>
-                                </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                    <Picker x:Name="Productto" Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding productoname}" 
-                            SelectedIndex="{Binding Producto, Mode = TwoWay}" IsVisible="{Binding AñadirProd}"/>
-                    <Button x:Name="AddProductto" Text="Añadir producto" Command="{Binding AddProductoCommand, Mode=TwoWay}" IsVisible="{Binding AñadirProd}"/>
-                    <DatePicker x:Name="DataIni" Date="{Binding DataIni, Mode = TwoWay}" Format="dd-MM-yyyy"/>
-                    <DatePicker x:Name="DataFi"  Date="{Binding DataFi, Mode = TwoWay}" Format="dd-MM-yyyy"/>
-                    <Entry x:Name="preu" Text="{Binding Preu, Mode = TwoWay}" Placeholder="Preu" ClearButtonVisibility="WhileEditing" Keyboard="Numeric"/>
-                    <Picker Title="Estado" ItemsSource="{Binding EstadosList}" ItemDisplayBinding="{Binding estadoname}" SelectedIndex="{Binding Estado, Mode=TwoWay}"/>
-                    <Entry Text="{Binding Extra, Mode=TwoWay}" Placeholder="Extra" ClearButtonVisibility="WhileEditing" />
-                    <Button Text="{Binding TextoBoton}"  Command="{Binding UploadCommand}"/>
+                    <Frame>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="CLIENT: " FontAttributes="Bold"  VerticalOptions="Center"></Label>
+                        <Entry x:Name="cliente"  VerticalOptions="Center" Text="{Binding Cliente, Mode = TwoWay}" Placeholder="Nom del Client" ClearButtonVisibility="WhileEditing" />
+                    </StackLayout>
+                    </Frame>
+                    <Frame>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="CAMPING: " FontAttributes="Bold"  VerticalOptions="Center"></Label>
+                        <Picker Title="Camping" ItemsSource="{Binding CampingsList}" VerticalOptions="Center" ItemDisplayBinding="{Binding campingname}" SelectedIndex="{Binding Camping, Mode = TwoWay}"/>
+                    </StackLayout>
+                    </Frame>
+                    <Frame>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="PARCELA: " VerticalOptions="Center"></Label>
+                        <Entry Text="{Binding Parcela,  Mode = TwoWay}"  VerticalOptions="Center" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
+                    </StackLayout>
+                    </Frame>
+                    <Frame>
+                        <CollectionView ItemsSource="{Binding ProductosPHList}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                <Grid Margin="5">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.6*"/>
+                                                <ColumnDefinition Width="0.13*"/>
+                                                <ColumnDefinition Width="0.13*"/>
+                                                <ColumnDefinition Width="0.13*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Text="{Binding productoname}" VerticalOptions="Center" HorizontalOptions="StartAndExpand"></Label>
+                                            <Button Grid.Column="1" Text="-" HorizontalOptions="Center" VerticalOptions="Start"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=ResProductCommand}"
+                                                CommandParameter="{Binding .}"></Button>
+                                            <Label Grid.Column="2" Text="{Binding cantidad}" VerticalOptions="Center" HorizontalOptions="Center"></Label>
+                                            <Button Grid.Column="3" Text="+" HorizontalOptions="End" VerticalOptions="Center"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=SumProductCommand}"
+                                                CommandParameter="{Binding .}"></Button>
+                                        </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Frame>
+                    <Frame>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.6*"/>
+                            <ColumnDefinition Width="0.4*"/>
+                            </Grid.ColumnDefinitions>
+                            <Picker Grid.Column="0" x:Name="Productto" Title="Producte" ItemsSource="{Binding ProductosList}" ItemDisplayBinding="{Binding productoname}" 
+                                SelectedIndex="{Binding Producto, Mode = TwoWay}" IsVisible="{Binding AñadirProd}"/>
+                            <Button Grid.Column="1" x:Name="AddProductto" Text="Añadir producto" Command="{Binding AddProductoCommand, Mode=TwoWay}" IsVisible="{Binding AñadirProd}"/>
+                        </Grid>
+                    </Frame>
+                    <Frame>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                                <Label Text="DATA INICIAL" FontAttributes="Bold" ></Label>
+                                <DatePicker x:Name="DataIni" Date="{Binding DataIni, Mode = TwoWay}" Format="dd-MM-yyyy"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                                <Label Text="DATA FINAL"  FontAttributes="Bold"></Label>
+                                <DatePicker x:Name="DataFi"   Date="{Binding DataFi, Mode = TwoWay}" Format="dd-MM-yyyy"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Frame>
+                    <Frame>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackLayout Orientation="Horizontal" Grid.Column="0" HorizontalOptions="Center">
+                            <Label VerticalOptions="Center"  FontAttributes="Bold" Text="ESTADO: "></Label>
+                                <Picker Grid.Column="0" VerticalOptions="Center" Title="Estado" ItemsSource="{Binding EstadosList}" ItemDisplayBinding="{Binding estadoname}" SelectedIndex="{Binding Estado, Mode=TwoWay}"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Center">
+                                <Label VerticalOptions="Center"  FontAttributes="Bold" Text="PRECIO: "></Label>
+                            <Entry VerticalOptions="Center" x:Name="preu" Text="{Binding Preu, Mode = TwoWay}" Placeholder="Preu" ClearButtonVisibility="WhileEditing" Keyboard="Numeric"/>
+                            </StackLayout>
+                        </Grid>
+                    </Frame>
+                    <Frame>
+                        <StackLayout Orientation="Horizontal" Grid.Column="1">
+                            <Label VerticalOptions="Center"  FontAttributes="Bold" Text="EXTRA: "></Label>
+                            <Entry VerticalOptions="Center" Text="{Binding Extra, Mode=TwoWay}" Placeholder="Extra" ClearButtonVisibility="WhileEditing" />
+                        </StackLayout>
+                    </Frame>
+                    <Frame>
+                        <Button Text="{Binding TextoBoton}"  Command="{Binding UploadCommand}"/>
+                    </Frame>
             </VerticalStackLayout>
         </ScrollView>
         </Grid>
-    </RefreshView>
 </ContentPage>

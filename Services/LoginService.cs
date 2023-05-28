@@ -46,8 +46,7 @@ namespace PFG2.Services
                         await SecureStorage.SetAsync("JwtToken", bt.token);
                         await SecureStorage.SetAsync("Userid", bt.userId.ToString());
                         await SecureStorage.SetAsync("Rol", bt.Rol.ToString());
-
-
+                        await SecureStorage.SetAsync("Expiration", DateTime.Now.AddMinutes(bt.expirationInMinutes).ToString());
                     }
                     else
                     {

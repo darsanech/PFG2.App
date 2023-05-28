@@ -25,13 +25,22 @@ namespace PFG2.ViewModel
             {
                 Loading = true;
                 Loaded = false;
-                var session = await SecureStorage.GetAsync("JwtToken");
+                string expira = await SecureStorage.GetAsync("Expiration");
+                if (expira != null && expira != "")
+                {
+                    Loading = false;
+                    Loaded = true;
+                    if (DateTime.Now.CompareTo(DateTime.Parse(expira)) > 0)
+                    {
+                        await SecureStorage.SetAsync("Expiration", "");
+                    }
+                    else
+                    {
+                        await Shell.Current.GoToAsync("MainListPage");
+                    }
+                }
                 Loading = false;
                 Loaded = true;
-                if (session != null && session != "")
-                {
-                    await Shell.Current.GoToAsync("MainListPage");
-                }
             }
             catch (Exception ex)
             {
@@ -54,8 +63,6 @@ namespace PFG2.ViewModel
                     await DataBaseService.GetDB();
                     await DataBaseService.InitDatabase();
                 }
-                
-                //var reservas = await DataBaseService.GetReservasList();
                 Loading = false;
                 Loaded = true;
                 await Shell.Current.GoToAsync("MainListPage");

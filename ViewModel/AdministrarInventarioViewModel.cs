@@ -27,6 +27,7 @@ public partial class AdministrarInventarioViewModel : ObservableObject
 	[ICommand]
     public async Task OnLoad()
     {
+        
         ProductosPHList.Clear();
         await DataBaseService.UpdateProductosList();
         var prods = await DataBaseService.GetProductosList();
@@ -38,9 +39,16 @@ public partial class AdministrarInventarioViewModel : ObservableObject
     [ICommand]
     public async Task Modificar(ProductoPH ph)
     {
-        var a = 2;
-        await DataBaseService.ModProductos((Producto)ph,ph.mod);
-        await Shell.Current.GoToAsync("..");
+        if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+        {
+            await Application.Current.MainPage.DisplayAlert("Atencion!", "No tienes conexion a internet", "Salir");
+        }
+        else
+        {
+            await DataBaseService.ModProductos((Producto)ph, ph.mod);
+
+        }
+        await Shell.Current.GoToAsync($"..");
 
     }
 }
