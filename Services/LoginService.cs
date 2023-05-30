@@ -37,38 +37,33 @@ namespace PFG2.Services
                 if (conn == NetworkAccess.Internet)
                 {
                     var response = await client.GetAsync(BaseUrl+$"/api/Login?usuario={username}&pass={password}");
-
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         var json = await response.Content.ReadAsStringAsync();
                         var bt = JsonConvert.DeserializeObject<BearerToken>(json);
-
                         await SecureStorage.SetAsync("JwtToken", bt.token);
                         await SecureStorage.SetAsync("Userid", bt.userId.ToString());
                         await SecureStorage.SetAsync("Rol", bt.Rol.ToString());
                         await SecureStorage.SetAsync("Expiration", DateTime.Now.AddMinutes(bt.expirationInMinutes).ToString());
+                        return "Ok";
                     }
                     else
                     {
-                        await Application.Current.MainPage.DisplayAlert("Atencion!", "No existes lmao", "Salir");
-                        return null;
+                        await Application.Current.MainPage.DisplayAlert("Atencion!", "Usuario o contraseña incorrectos", "Salir");
                     }
-                    return "Ok";
                 }
                 else
                 {
                     await Application.Current.MainPage.DisplayAlert("Atencion!", "No hay conexion", "Salir");
-                    return null;
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unable to get information from server {ex}");
                 return null;
 
             }
-
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error {ex}");
+                return null;
+            }
         }
-
     }
 }
