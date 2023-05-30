@@ -31,9 +31,6 @@
                 <VerticalStackLayout>
                     <Label Text="Usuarios"></Label>
                     <Button 
-                        Text="Administrar usuarios"
-                        BackgroundColor="Green"/>
-                    <Button 
                         Text="Localizar Repartidores"
                         BackgroundColor="Green"
                         Command="{Binding LocalizarRepartidoresCommand}"/>
@@ -46,17 +43,6 @@
                         Text="Administrar Inventario"
                         BackgroundColor="Green"
                         Command="{Binding AdministrarInventarioCommand}"/>
-                </VerticalStackLayout>
-            </Frame>
-            <Frame>
-                <VerticalStackLayout>
-                    <Label Text="Otro"></Label>
-                    <Button 
-                        Text="Otro"
-                        BackgroundColor="Green"/>
-                    <Button 
-                        Text="Otro"
-                        BackgroundColor="Green"/>
                 </VerticalStackLayout>
             </Frame>
         </VerticalStackLayout>

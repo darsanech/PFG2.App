@@ -6,49 +6,65 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Frame">
-                <Setter Property="CornerRadius" Value="5"></Setter>
-                <Setter Property="Padding" Value="0"></Setter>
-                <Setter Property="Background" Value="AntiqueWhite"></Setter>
-                <Setter Property="Margin" Value="15"></Setter>
+                <Setter Property="Padding" Value="2"></Setter>
+                <Setter Property="Background" Value="Gray"></Setter>
+                <Setter Property="Margin" Value="5,0,5,10"></Setter>
+            </Style>
+            <Style TargetType="StackLayout">
+                <Setter Property="Margin" Value="10,3,10,3"></Setter>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
     <VerticalStackLayout  VerticalOptions="Center" Margin="20">
-        
-        <Label 
-            Text="Aqui se realiza la buscacion!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
         <Frame>
-            <Entry Text="{Binding Parcela}" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
-        </Frame>
-        <Frame>
-            <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" 
-                SelectedIndex="{Binding Camping}"   FontSize="20"/>
-        </Frame>
-        <Frame>
-            <Picker Title="Estado" ItemsSource="{Binding EstadoList}" ItemDisplayBinding="{Binding estadoname}" 
+            <StackLayout Orientation="Horizontal">
+                <Label Text="ESTADO: " FontAttributes="Bold"  VerticalOptions="Center"></Label>
+                <Picker Title="Estado" ItemsSource="{Binding EstadoList}" ItemDisplayBinding="{Binding estadoname}" 
                 SelectedIndex="{Binding Estado}"   FontSize="20"/>
+            </StackLayout>
         </Frame>
         <Frame>
-            <VerticalStackLayout>
-                <Label Text="Data inicial" Margin="20"></Label>
-                <HorizontalStackLayout>
-                    <CheckBox IsChecked="{Binding IniCheck, Mode=TwoWay}"/>
-                    <DatePicker x:Name="DataIni" Date="{Binding DataIni}" Format="dd-MM-yyyy"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="CAMPING: " FontAttributes="Bold"  VerticalOptions="Center"></Label>
+                <Picker Title="Camping" ItemsSource="{Binding CampingsList}" ItemDisplayBinding="{Binding campingname}" 
+                SelectedIndex="{Binding Camping}"   FontSize="20"/>
+            </StackLayout>
         </Frame>
         <Frame>
-            <VerticalStackLayout>
-                <Label Text="Data final"></Label>
-                <HorizontalStackLayout>
-                    <CheckBox IsChecked="{Binding FiCheck, Mode=TwoWay}"/>
-                    <DatePicker x:Name="DataFi"  Date="{Binding DataFi}" Format="dd-MM-yyyy"/>
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="PARCELA: " FontAttributes="Bold"  VerticalOptions="Center"></Label>
+                <Entry Text="{Binding Parcela}" Placeholder="Numero de Parcela" ClearButtonVisibility="WhileEditing"/>
+            </StackLayout>
         </Frame>
-        <Button Text="A BUSCAR!" Command="{Binding SearchCommand}" Margin="20"/>
+        <Frame>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="CLIENTE: " FontAttributes="Bold"  VerticalOptions="Center"></Label>
+                <Entry Text="{Binding Cliente}" Placeholder="Nombre del cliente" ClearButtonVisibility="WhileEditing"/>
+            </StackLayout>
+        </Frame>
+        <Frame>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                    <Label Text="DATA INICIAL" FontAttributes="Bold" ></Label>
+                    <HorizontalStackLayout>
+                        <CheckBox IsChecked="{Binding IniCheck, Mode=TwoWay}"/>
+                        <DatePicker x:Name="DataIni" Date="{Binding DataIni}" Format="dd-MM-yyyy"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label Text="DATA FINAL"  FontAttributes="Bold"></Label>
+                    <HorizontalStackLayout>
+                        <CheckBox IsChecked="{Binding FiCheck, Mode=TwoWay}"/>
+                        <DatePicker x:Name="DataFi"  Date="{Binding DataFi}" Format="dd-MM-yyyy"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Grid>
+        </Frame>
+        <Button Text="BUSCAR" Command="{Binding SearchCommand}" Margin="20"/>
 
     </VerticalStackLayout>
 </ContentPage>

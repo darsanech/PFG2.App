@@ -5,6 +5,7 @@
              x:Class="PFG2.Views.CampingListPage"
              xmlns:ViewModel="clr-namespace:PFG2.ViewModel"
              Title="{Binding Camping}"
+             BackgroundColor="Black"
              >
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -19,7 +20,7 @@
         <BackButtonBehavior IsEnabled="True" IsVisible="True"/>
     </Shell.BackButtonBehavior>
     
-    <Grid Background="#212121">
+    <Grid Background="Black">
 
         <Grid.RowDefinitions>
             

@@ -156,7 +156,7 @@ namespace PFG2.Services
 
             return query;
         }
-        public static async Task<IEnumerable<ReservasLista>> GetReservasFilterKnownEstadoList(int campingid,string parcela, int estadoid, string dataini, string datafi)
+        public static async Task<IEnumerable<ReservasLista>> GetReservasFilterKnownEstadoList(int campingid,string parcela, int estadoid, string cliente, string dataini, string datafi)
         {
             await Init();
 
@@ -170,16 +170,17 @@ namespace PFG2.Services
             {
                 query = query.Where(x => x.numeroparcela == parcela).ToList();
             }
-            else
+            if (dataini != "")
             {
-                if (dataini != "")
-                {
-                    query = query.Where(x => x.datainici == dataini).ToList();
-                }
-                if (datafi != "")
-                {
-                    query = query.Where(x => x.datafinal == datafi).ToList();
-                }
+                query = query.Where(x => x.datainici == dataini).ToList();
+            }
+            if (datafi != "")
+            {
+                query = query.Where(x => x.datafinal == datafi).ToList();
+            }
+            if (cliente != "")
+            {
+                query = query.Where(x => x.clientename.Contains(cliente)).ToList();
             }
             return query;
         }

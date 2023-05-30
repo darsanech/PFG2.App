@@ -43,6 +43,7 @@ namespace PFG2.ViewModel
         async Task BackButton()
         {
             newPage = true;
+            await SecureStorage.SetAsync("Expiration", "");
             await Shell.Current.GoToAsync("..");
         }
         [ICommand]

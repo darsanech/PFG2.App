@@ -3,35 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PFG2.MainPage"
              xmlns:ViewModel="clr-namespace:PFG2.ViewModel"
-             x:DataType="ViewModel:MainPageViewModel">
+             x:DataType="ViewModel:MainPageViewModel"
+             Title="">
     <ScrollView>
         <VerticalStackLayout
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
-
+            <Image Source="rfm_logo.png" HeightRequest="400" />
             <Frame HeightRequest="45" Padding="0" HorizontalOptions="Fill" HasShadow="true">
                 <Entry Text="{Binding Username}" TextColor="Black" Margin="20,0,0,0" VerticalOptions="Center" Placeholder="Usuario"></Entry>
             </Frame>
-
             <Frame HeightRequest="45" Padding="0" HorizontalOptions="Fill" HasShadow="true">
                 <Entry Text="{Binding Password}" TextColor="Black" Margin="20,0,0,0" VerticalOptions="Center" IsPassword="true" Placeholder="Contraseña"></Entry>
             </Frame>
-
-            <Frame>
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:MainPageViewModel}}, Path=CheckCredentials}"
-                        CommandParameter="{Binding .}"/>
-
-                </Frame.GestureRecognizers>
-                <Button
+            <Button
                 Text="Click me"
                 Command="{Binding CheckCredentialsCommand}"
-                HorizontalOptions="Center" IsEnabled="{Binding Loaded, Mode=TwoWay}"/>
-            </Frame>
+                HorizontalOptions="CenterAndExpand" IsEnabled="{Binding Loaded, Mode=TwoWay}"/>
             <ActivityIndicator IsRunning="True" IsVisible="{Binding Loading, Mode=TwoWay}"/>
-
         </VerticalStackLayout>
     </ScrollView>
 

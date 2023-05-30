@@ -14,6 +14,7 @@ namespace PFG2.ViewModel
     [QueryProperty("Campingid", "Campingid")]
     [QueryProperty("Estado", "Estado")]
     [QueryProperty("Parcela", "Parcela")]
+    [QueryProperty("Cliente", "Cliente")]
     [QueryProperty("Datainici", "Datainici")]
     [QueryProperty("Datafinal", "Datafinal")]
 
@@ -27,6 +28,8 @@ namespace PFG2.ViewModel
         string estado=null;
         [ObservableProperty]
         string parcela = null;
+        [ObservableProperty]
+        string cliente = null;
         [ObservableProperty]
         string datainici = null;
         [ObservableProperty]
@@ -64,7 +67,7 @@ namespace PFG2.ViewModel
             {
                 CampingList = false;
                 var ok = await DataBaseService.CheckUpdate(campingid);
-                var reservas = await DataBaseService.GetReservasFilterKnownEstadoList(campingid, parcela, Int32.Parse(estado), datainici, datafinal);
+                var reservas = await DataBaseService.GetReservasFilterKnownEstadoList(campingid, parcela, Int32.Parse(estado), cliente, datainici, datafinal);
                 ReservasListFiltered.Clear();
                 foreach (var reserva in reservas)
                 {
@@ -142,7 +145,14 @@ namespace PFG2.ViewModel
         [ICommand]
         async Task MapButton()
         {
-            await Shell.Current.GoToAsync($"MapPage?Campingid={campingid}");
+            if (campingid != 9)
+            {
+                await Shell.Current.GoToAsync($"MapPage?Campingid={campingid}");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Atencion!", "No hay mapa disponible", "Salir");
+            }
         }
         [ICommand]
         public async void SiguientePaso(ReservasLista aReserva)

@@ -32,6 +32,8 @@ namespace PFG2.ViewModel
         [ObservableProperty]
         string parcela;
         [ObservableProperty]
+        string cliente;
+        [ObservableProperty]
         DateTime dataIni = DateTime.Today;
         [ObservableProperty]
         DateTime dataFi = DateTime.Today;
@@ -86,8 +88,12 @@ namespace PFG2.ViewModel
                 {
                     parcela = null;
                 }
+                if (cliente == "")
+                {
+                    cliente = null;
+                }
                 //var ReservasList = await DataBaseService.GetReservasFilterKnownEstadoList(CampingsList[camping].campingid, parcela, estado, dataIniStr, dataFiStr);
-                await Shell.Current.GoToAsync($"CampingListPage?Estado={EstadoList[estado].estadoid}&Parcela={parcela}&Datafinal={dataFiStr}&Datainici={dataIniStr}&Campingid={CampingsList[camping].campingid}");
+                await Shell.Current.GoToAsync($"CampingListPage?Estado={EstadoList[estado].estadoid}&Parcela={parcela}&Cliente={cliente}&Datafinal={dataFiStr}&Datainici={dataIniStr}&Campingid={CampingsList[camping].campingid}");
             }
         }
     }
