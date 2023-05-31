@@ -61,9 +61,6 @@ namespace PFG2.Services
         {
             if (db != null && dbp!=null)
                 return;
-
-            // Get an absolute path to the database file
-            
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
             var databasePendiente = Path.Combine(FileSystem.AppDataDirectory, "MyDataPendiente.db");
             try
@@ -209,7 +206,7 @@ namespace PFG2.Services
 
                 if (conn == NetworkAccess.Internet)
                 {
-                    //await PutUbi();
+                    await PutUbi();
                     await AuthHeader();
                     await UploadPendiente();
                     var query = await dbp.Table<ReservaPendiente>().ToListAsync();
@@ -222,18 +219,12 @@ namespace PFG2.Services
                             var contents = queryB.Content.ReadAsStringAsync().Result;
                             IEnumerable<Reserva> res = JsonConvert.DeserializeObject<IEnumerable<Reserva>>(contents);
                             await db.InsertOrReplaceAllWithChildrenAsync(res);
+                            return true;
                         }
                     }
-                    else
-                    {
-                        return false;
-                    }
                 }
-                else
-                {
-                    return false;
-                }
-                return true;
+                return false;
+
             }
             catch (Exception ex)
             {
@@ -261,21 +252,14 @@ namespace PFG2.Services
                         var contents = queryB.Content.ReadAsStringAsync().Result;
                         IEnumerable<Producto> res = JsonConvert.DeserializeObject<IEnumerable<Producto>>(contents);
                         await db.InsertOrReplaceAllWithChildrenAsync(res);
-                    }
-                    else
-                    {
-                        return false;
+                        return true;
                     }
                 }
-                else
-                {
-                    return false;
-                }
-                return true;
+                return false;
+
             }
             catch (Exception ex)
             {
-                var a = ex;
                 return false;
             }
         }
@@ -318,10 +302,7 @@ namespace PFG2.Services
                 {
                     var id = await db.InsertAsync(nReserva);
                     await dbp.InsertAsync((ReservaPendiente)nReserva);
-                    var query = await dbp.Table<ReservaPendiente>().ToListAsync();
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -357,7 +338,6 @@ namespace PFG2.Services
                     }
                     var query = await dbp.Table<ReservaPendiente>().ToListAsync();
                 }
-
             }
             catch (System.Exception ex)
             {
@@ -454,7 +434,6 @@ namespace PFG2.Services
         public static async Task<string> GetEstadoName(int estadoId)
         {
             await Init();
-
             var res = await db.Table<Estado>().Where(x => x.estadoid == estadoId).FirstAsync();
             return res.estadoname;
         }
@@ -468,7 +447,6 @@ namespace PFG2.Services
                 await AuthHeader();
                 var Response = await client.GetAsync(BaseUrl + $"/api/Suscripcion?campid=" + campingid.ToString());
                 return Response.Content.ReadAsStringAsync().Result;
-
             }
             catch (Exception ex)
             {
