@@ -62,7 +62,7 @@ namespace PFG2.Services
             if (db != null && dbp!=null)
                 return;
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "MyData2.db");
-            var databasePendiente = Path.Combine(FileSystem.AppDataDirectory, "MyDataPendiente.db");
+            var databasePendiente = Path.Combine(FileSystem.AppDataDirectory, "MyDataPendiente2.db");
             try
             {
                 if (!File.Exists(databasePendiente))
@@ -71,11 +71,13 @@ namespace PFG2.Services
                 }
                 dbp = new SQLiteAsyncConnection(databasePendiente);
                 await dbp.CreateTableAsync<ReservaPendiente>();
+                await dbp.CreateTableAsync<ReservaProducto>();
                 db = new SQLiteAsyncConnection(databasePath);
                 await db.CreateTableAsync<Reserva>();
                 await db.CreateTableAsync<Camping>();
                 await db.CreateTableAsync<Estado>();
                 await db.CreateTableAsync<Producto>();
+                await db.CreateTableAsync<ReservaProducto>();
                 await db.CreateTableAsync<User>();
                 await db.CreateTableAsync<Suscripcion>();
                 string text = File.ReadAllText(databasePendiente);
@@ -133,9 +135,9 @@ namespace PFG2.Services
         public static async Task<ReservasLista> GetReservaListabyId(int reservaId)
         {
             await Init();
-            var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
-                "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
-                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid Where r.idreserva=" + reservaId.ToString());
+            var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, GROUP_CONCAT(p.productoname || ' x' || rp.quantitat, ', ') productes, " +
+                " r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
+                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join reservaproducto rp on r.idreserva=rp.idreserva inner join Producto p on rp.producteid=p.producteid inner join Estado as e on e.estadoid = r.estadoid Where r.idreserva=" + reservaId.ToString()+ " group by r.idreserva");
 
             return query.FirstOrDefault();
         }
@@ -143,10 +145,10 @@ namespace PFG2.Services
         {
             await Init();
 
-            var query= await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
-                "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
-                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid " +
-                "Where r.campingid=" + campingid.ToString()+ " and (r.estadoid=1 or r.estadoid=3 or r.estadoid=5 or r.estadoid=6)");
+            var query= await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, GROUP_CONCAT(p.productoname || ' x' || rp.quantitat, ', ') productes, " +
+                "r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
+                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid inner join reservaproducto rp on r.idreserva=rp.idreserva inner join Producto p on rp.producteid=p.producteid " +
+                "Where r.campingid=" + campingid.ToString()+ " and (r.estadoid=1 or r.estadoid=3 or r.estadoid=5 or r.estadoid=6) group by r.idreserva");
             
 
             //var query = await db.Table<Reserva>().Where(x => x.campingid == campingid).ToListAsync();
@@ -156,12 +158,10 @@ namespace PFG2.Services
         public static async Task<IEnumerable<ReservasLista>> GetReservasFilterKnownEstadoList(int campingid,string parcela, int estadoid, string cliente, string dataini, string datafi)
         {
             await Init();
-
-            //var query = await db.Table<Reserva>().Where(x => x.Camping == camping && x.Estado==estado).ToListAsync();
-            var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, r.productes, " +
+            var query = await db.QueryAsync<ReservasLista>("select r.idreserva, r.clientename, r.numeroparcela, r.campingid, c.campingname, GROUP_CONCAT(p.productoname || ' x' || rp.quantitat, ', ') productes, " +
                 "r.productescodes, r.datainici, r.datafinal, r.preu, r.estadoid, e.estadoname, r.extra " +
-                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid " +
-                "Where r.campingid=" + campingid.ToString()+" and r.estadoid="+estadoid.ToString());
+                "from Reserva as r inner join Camping as c on c.campingid=r.campingid inner join Estado as e on e.estadoid = r.estadoid inner join reservaproducto rp on r.idreserva=rp.idreserva inner join Producto p on rp.producteid=p.producteid " +
+                "Where r.campingid=" + campingid.ToString()+" and r.estadoid="+estadoid.ToString()+" group by r.idreserva");
 
             if (parcela!="")
             {
@@ -206,7 +206,7 @@ namespace PFG2.Services
 
                 if (conn == NetworkAccess.Internet)
                 {
-                    await PutUbi();
+                    //await PutUbi();
                     await AuthHeader();
                     await UploadPendiente();
                     var query = await dbp.Table<ReservaPendiente>().ToListAsync();
@@ -269,6 +269,20 @@ namespace PFG2.Services
             var query = await db.Table<Producto>().ToListAsync();
             return query;
         }
+        public static async Task<IEnumerable<ReservaProductoPH>> GetProductosReserva(int idreserva)
+        {
+            await Init();
+            var query = await db.QueryAsync<ReservaProductoPH>("select rp.idreserva, rp.producteid, rp.quantitat, p.productoname " +
+                "from reservaproducto rp inner join Producto p on rp.producteid=p.producteid " +
+                "Where rp.idreserva=" + idreserva.ToString());
+            return query;
+        }
+        public static async Task<List<ReservaProducto>> GetProductosReserva2(int idreserva)
+        {
+            await Init();
+            var query = await db.QueryAsync<ReservaProducto>("select * from ReservaProducto Where idreserva=" + idreserva + ";");
+            return query.ToList();
+        }
         public static async Task ModProductos(Producto p, int mod)
         {
             await Init();
@@ -282,7 +296,7 @@ namespace PFG2.Services
             var query = await db.Table<Estado>().ToListAsync();
             return query;
         }
-        public static async Task AddReserva(Reserva nReserva)
+        public static async Task AddReserva(Reserva nReserva, List<ReservaProducto> nReservaProducto)
         {
             try
             {
@@ -291,17 +305,22 @@ namespace PFG2.Services
                 if (conn == NetworkAccess.Internet)
                 {
                     await AuthHeader();
-                    var data = JsonConvert.SerializeObject(nReserva);
+                    var data = JsonConvert.SerializeObject(new { nReserva, nReservaProducto });
                     var content = new StringContent(data, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync(BaseUrl + "/api/Reserva", content);
                     var nid = response.Content.ReadAsStringAsync().Result;
                     nReserva.idreserva = Int32.Parse(nid);
+                    nReservaProducto.ToList().ForEach(x => x.idreserva = Int32.Parse(nid));
+
                     await db.InsertAsync(nReserva); 
+                    await db.InsertAllAsync(nReservaProducto);
                 }
                 else
                 {
                     var id = await db.InsertAsync(nReserva);
                     await dbp.InsertAsync((ReservaPendiente)nReserva);
+                    nReservaProducto.ToList().ForEach(x => x.idreserva = nReserva.idreserva);
+                    await db.InsertAllAsync(nReservaProducto);
                 }
             }
             catch (Exception ex)
@@ -309,7 +328,7 @@ namespace PFG2.Services
                 var a = ex;
             }
         }
-        public static async Task UpdateReserva(Reserva nReserva)
+        public static async Task UpdateReserva(Reserva nReserva, List<ReservaProducto> nReservaProducto)
         {
             try
             {
@@ -317,26 +336,37 @@ namespace PFG2.Services
                 var conn = Connectivity.NetworkAccess;
                 if (conn == NetworkAccess.Internet){
                     await AuthHeader();
-                    var data = JsonConvert.SerializeObject(nReserva);
+                    var data = JsonConvert.SerializeObject(new { nReserva, nReservaProducto });
                     var content = new StringContent(data, Encoding.UTF8, "application/json");
                     var response = await client.PutAsync(BaseUrl + "/api/Reserva", content);
                     var id = await db.UpdateAsync(nReserva);
+                    var oldlist = await GetProductosReserva2(nReserva.idreserva);
+                    if (!nReservaProducto.Equals(oldlist))
+                    {
+                        var query = await db.QueryAsync<ReservaProducto>("Delete from ReservaProducto where idreserva=" + nReserva.idreserva.ToString());
+                        await db.InsertAllAsync(nReservaProducto);
+                    }
                 }
                 else
                 {
                     var id = await db.UpdateAsync(nReserva);
                     ReservaPendiente np = (ReservaPendiente)nReserva;
                     var res = await dbp.Table<ReservaPendiente>().Where(x => x.idreserva == nReserva.idreserva).ToListAsync();
+                    np.type = true;
                     if (res.Count()==0)
                     {
-                        np.type = true;
                         await dbp.InsertAsync(np);
                     }
                     else
                     {
                         await dbp.UpdateAsync(np);
                     }
-                    var query = await dbp.Table<ReservaPendiente>().ToListAsync();
+                    var oldlist = await GetProductosReserva2(np.idreserva);
+                    if (!nReservaProducto.Equals(oldlist))
+                    {
+                        await db.QueryAsync<ReservaProducto>("Delete from ReservaProducto where idreserva=" + nReserva.idreserva.ToString());
+                        await db.InsertAllAsync(nReservaProducto);
+                    }
                 }
             }
             catch (System.Exception ex)
@@ -349,19 +379,24 @@ namespace PFG2.Services
             var query = await dbp.Table<ReservaPendiente>().ToListAsync();
             var conn = Connectivity.NetworkAccess;
             Reserva up, old;
+
             while (query.Count()> 0 && conn == NetworkAccess.Internet)
             {
                 up = (Reserva)query[0];
                 old= (Reserva)query[0];
                 if (query[0].type) //Put
                 {
-                    await UpdateReserva(up);
+                    var listproductos = await GetProductosReserva2(up.idreserva);
+                    await UpdateReserva(up, listproductos);
                 }
                 else //Post
                 {
-                    var a=await db.DeleteAsync(old);
+                    var oldlistproductos = await GetProductosReserva2(old.idreserva);
+                    await db.QueryAsync<ReservaProducto>("Delete from ReservaProducto where idreserva=" + old.idreserva.ToString());
+                    oldlistproductos.ToList().ForEach(x => x.idreserva = 0);
+                    var a = await db.DeleteAsync(old);
                     up.idreserva = 0;
-                    await AddReserva(up);
+                    await AddReserva(up, oldlistproductos);
                 }
                 var b = await dbp.DeleteAsync(query[0]);
                 query.RemoveAt(0);
@@ -385,7 +420,7 @@ namespace PFG2.Services
             {
                 nReserva.estadoid += 1;
             }
-            await UpdateReserva(nReserva);
+            //await UpdateReserva(nReserva);
         }
         //
         public static async Task<IEnumerable<Parcela>> ShowMap(int campingId)

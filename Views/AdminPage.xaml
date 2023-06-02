@@ -45,6 +45,15 @@
                         Command="{Binding AdministrarInventarioCommand}"/>
                 </VerticalStackLayout>
             </Frame>
+            <Frame>
+                <VerticalStackLayout>
+                    <Label Text="Reservas"></Label>
+                    <Button 
+                        Text="Actualizar Reservas"
+                        BackgroundColor="Green"
+                        Command="{Binding AdministrarInventarioCommand}"/>
+                </VerticalStackLayout>
+            </Frame>
         </VerticalStackLayout>
 
     </ScrollView>

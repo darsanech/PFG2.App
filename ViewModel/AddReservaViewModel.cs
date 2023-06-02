@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Animations;
 using Microsoft.VisualBasic.FileIO;
 using PFG2.Models;
 using PFG2.Services;
@@ -34,7 +35,7 @@ namespace PFG2.ViewModel
         [ObservableProperty]
         int producto = -1;
 
-        public ObservableCollection<ProductoPH> ProductosPHList { get; } = new();
+        public ObservableCollection<ReservaProductoPH> ProductosPHList { get; } = new();
 
         [ObservableProperty]
         string textoBoton;
@@ -82,37 +83,36 @@ namespace PFG2.ViewModel
                 {
                     EstadosList.Add(estado);
                 }
-                newPage = false;
                 TextoBoton = "Añadir reserva";
+                if (Idres > 0)
+                {
+                    reservaEditar = await DataBaseService.GetReservaListabyId(idres);
+                    Cliente = reservaEditar.clientename;
+                    Parcela = reservaEditar.numeroparcela;
+                    Camping = reservaEditar.campingid - 1;
+                    Estado = reservaEditar.estadoid - 1;
+                    DataIni = DateTime.ParseExact(reservaEditar.datainici, "dd/MM/yyyy", null);
+                    DataFi = DateTime.ParseExact(reservaEditar.datafinal, "dd/MM/yyyy", null);
+                    Preu = reservaEditar.preu;
+                    Extra = reservaEditar.extra;
+                    StringtoPPH();
+                    TextoBoton = "Modificar reserva";
+                }
+                newPage = false;
             }
-            if (Idres > 0)
-            {
-                reservaEditar = await DataBaseService.GetReservaListabyId(idres);
-                Cliente = reservaEditar.clientename;
-                Parcela = reservaEditar.numeroparcela;
-                Camping = reservaEditar.campingid-1;
-                Estado = reservaEditar.estadoid-1;
-                DataIni = DateTime.ParseExact(reservaEditar.datainici, "dd/MM/yyyy", null);
-                DataFi = DateTime.ParseExact(reservaEditar.datafinal, "dd/MM/yyyy", null);
-                Preu = reservaEditar.preu;
-                Extra = reservaEditar.extra;
-                StringtoPPH();
-                TextoBoton = "Modificar reserva";
-            }
-
-        }
-        [ICommand]
-        public async Task Refresh()
-        {
-            isRefreshing = false;
         }
 
         [ICommand]
         public async Task AddProducto()
         {
-            ProductoPH niu = new ProductoPH();
-            niu.cantidad = 1;
+            ReservaProductoPH niu = new ReservaProductoPH();
+            niu.quantitat = 1;
             niu.productoname = ProductosList[producto].productoname;
+            niu.producteid = producto + 1;
+            if (idres != null)
+            {
+                niu.idreserva = idres;
+            }
             ProductosPHList.Add(niu);
             Producto = -1;
             if (ProductosPHList.Count() >= 5)
@@ -143,14 +143,6 @@ namespace PFG2.ViewModel
             {
                 a.Add("Data incorrecta");
             }
-            if (Cliente == null)
-            {
-                a.Add("Falta nom del client");
-            }
-            if (parcela == null)
-            {
-                a.Add("Falta numero de parcela");
-            }
             if (preu == 0)
             {
                 a.Add("Falta el preu");
@@ -167,13 +159,19 @@ namespace PFG2.ViewModel
             #endregion
             else
             {
+                if(cliente==null || cliente == "")
+                {
+                    cliente = "???";
+                }
+                if (parcela == null || parcela == "")
+                {
+                    parcela = "???";
+                }
                 Reserva newItem = new Reserva()
                 {
                     clientename = cliente,
                     numeroparcela = parcela,
                     campingid = camping+1,
-                    productes = PPHtoString(),
-                    productescodes = "",
                     datainici = dataIni.ToString("dd/MM/yyyy"),
                     datafinal = dataFi.ToString("dd/MM/yyyy"),
                     Preu = preu,
@@ -181,16 +179,17 @@ namespace PFG2.ViewModel
                     Extra = extra,
                     userid = 1,
                 };
+
                 try
                 {
                     if (idres != 0)
                     {
                         newItem.idreserva= idres;
-                        await DataBaseService.UpdateReserva(newItem);
+                        await DataBaseService.UpdateReserva(newItem, PPHtolist());
                     }
                     else
                     {
-                        await DataBaseService.AddReserva(newItem);
+                        await DataBaseService.AddReserva(newItem, PPHtolist());
                     }
                 }
                 catch(Exception ex) { 
@@ -199,55 +198,36 @@ namespace PFG2.ViewModel
                 
             }
         }
-        private string PPHtoString()
+        private List<ReservaProducto> PPHtolist()
         {
-            string res="";
-            int count = ProductosPHList.Count();
-            foreach (ProductoPH pph in ProductosPHList)
+            List <ReservaProducto> LRP= new List<ReservaProducto>();
+            foreach (ReservaProductoPH RP in ProductosPHList)
             {
-                res += pph.productoname;
-                if (pph.cantidad > 1)
-                {
-                    res += " x" + pph.cantidad;
-                }
-                count--;
-                if(count != 0)
-                    res += ", ";
+                LRP.Add((ReservaProducto)RP);
             }
-            return res;
+            return LRP;
         }
-        private void StringtoPPH()
+        private async void StringtoPPH()
         {
-            string[] Productes=reservaEditar.productes.Split(", ");
-            foreach (string s in Productes)
+            var LRP= await DataBaseService.GetProductosReserva(Idres);
+            foreach (ReservaProductoPH RP in LRP)
             {
-                string[] Producte=s.Split(" x");
-                ProductoPH niu=new ProductoPH();
-                niu.productoname = Producte[0];
-                if (Producte.Length==1)
-                {
-                    niu.cantidad= 1;
-                }
-                else
-                {
-                    niu.cantidad=Int32.Parse(Producte[1]);
-                }
-                ProductosPHList.Add(niu);
+                ProductosPHList.Add(RP);
             }
         }
         [ICommand]
-        public void SumProduct(ProductoPH pph)
+        public void SumProduct(ReservaProductoPH pph)
         {
             var i=ProductosPHList.IndexOf(pph);
-            pph.cantidad++;
+            pph.quantitat++;
             ProductosPHList[i]=pph;
         }
         [ICommand]
-        public void ResProduct(ProductoPH pph)
+        public void ResProduct(ReservaProductoPH pph)
         {
             var i = ProductosPHList.IndexOf(pph);
-            pph.cantidad--;
-            if(pph.cantidad!=0)
+            pph.quantitat--;
+            if(pph.quantitat != 0)
                 ProductosPHList[i]=pph;
             else
             {

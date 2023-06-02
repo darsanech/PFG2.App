@@ -19,10 +19,6 @@ namespace PFG2.Models
         public string numeroparcela { get; set; }
         [Column("campingid")]
         public int campingid { get; set; }
-        [Column("productes")]
-        public string productes { get; set; }
-        [Column("productescodes")]
-        public string productescodes { get; set; }
         [Column("datainici")]
         public string datainici { get; set; }
         [Column("datafinal")]

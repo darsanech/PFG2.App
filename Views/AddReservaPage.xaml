@@ -49,7 +49,7 @@
                                             <Button Grid.Column="1" Text="-" HorizontalOptions="Center" VerticalOptions="Start"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=ResProductCommand}"
                                                 CommandParameter="{Binding .}"></Button>
-                                            <Label Grid.Column="2" Text="{Binding cantidad}" VerticalOptions="Center" HorizontalOptions="Center"></Label>
+                                            <Label Grid.Column="2" Text="{Binding quantitat}" VerticalOptions="Center" HorizontalOptions="Center"></Label>
                                             <Button Grid.Column="3" Text="+" HorizontalOptions="End" VerticalOptions="Center"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ViewModel:AddReservaViewModel}}, Path=SumProductCommand}"
                                                 CommandParameter="{Binding .}"></Button>

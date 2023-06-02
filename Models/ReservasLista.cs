@@ -15,11 +15,6 @@ namespace PFG2.Models
         public int campingid { get; set; }
         public string campingname { get; set; }
         public string productes { get; set; }
-        public string productestranslated
-        {
-            get => productes + "!";
-        }
-        public string productescodes { get; set; }
         public string datainici { get; set; }
         public string datafinal { get; set; }
         public int preu { get; set; }
