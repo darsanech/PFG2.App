@@ -6,7 +6,7 @@
     <Grid>
     <WebView>
         <WebView.Source>
-            <HtmlWebViewSource Html="{Binding Salsa}"/>
+            <HtmlWebViewSource Html="{Binding Source}"/>
         </WebView.Source>
     </WebView>
     </Grid>

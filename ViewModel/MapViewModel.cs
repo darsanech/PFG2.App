@@ -19,7 +19,7 @@ namespace PFG2.ViewModel
     public partial class MapViewModel : ObservableObject
     {
         [ObservableProperty]
-        string salsa;
+        string source;
         [ObservableProperty]
         int campingid;
         public ObservableCollection<Parcela> ParcelaList { get; } = new();
@@ -73,7 +73,7 @@ namespace PFG2.ViewModel
                     }
                 }
 
-                Salsa = @"<!DOCTYPE html>
+                Source = @"<!DOCTYPE html>
 <html lang=""en"">
 <head>
     <meta charset=""UTF-8"">
@@ -94,15 +94,15 @@ namespace PFG2.ViewModel
     <script src=""https://unpkg.com/leaflet@1.9.4/dist/leaflet.js""></script>
     <script>
         var map = L.map('map').setView(";
-                Salsa += origin;
-                Salsa += @", 18);
+                Source += origin;
+                Source += @", 18);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href=""http://www.openstreetmap.org/copyright"">OpenStreetMap</a>'
         }).addTo(map);
 ";
-                Salsa += addon;
-                Salsa += @"
+                Source += addon;
+                Source += @"
     </script>
 
 </body>
