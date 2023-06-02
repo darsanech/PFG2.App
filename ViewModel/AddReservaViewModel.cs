@@ -95,7 +95,7 @@ namespace PFG2.ViewModel
                     DataFi = DateTime.ParseExact(reservaEditar.datafinal, "dd/MM/yyyy", null);
                     Preu = reservaEditar.preu;
                     Extra = reservaEditar.extra;
-                    StringtoPPH();
+                    QuerytoPPH();
                     TextoBoton = "Modificar reserva";
                 }
                 newPage = false;
@@ -185,11 +185,11 @@ namespace PFG2.ViewModel
                     if (idres != 0)
                     {
                         newItem.idreserva= idres;
-                        await DataBaseService.UpdateReserva(newItem, PPHtolist());
+                        await DataBaseService.UpdateReserva(newItem, PPHtoQuery());
                     }
                     else
                     {
-                        await DataBaseService.AddReserva(newItem, PPHtolist());
+                        await DataBaseService.AddReserva(newItem, PPHtoQuery());
                     }
                 }
                 catch(Exception ex) { 
@@ -198,7 +198,7 @@ namespace PFG2.ViewModel
                 
             }
         }
-        private List<ReservaProducto> PPHtolist()
+        private List<ReservaProducto> PPHtoQuery()
         {
             List <ReservaProducto> LRP= new List<ReservaProducto>();
             foreach (ReservaProductoPH RP in ProductosPHList)
@@ -207,7 +207,7 @@ namespace PFG2.ViewModel
             }
             return LRP;
         }
-        private async void StringtoPPH()
+        private async void QuerytoPPH()
         {
             var LRP= await DataBaseService.GetProductosReserva(Idres);
             foreach (ReservaProductoPH RP in LRP)
